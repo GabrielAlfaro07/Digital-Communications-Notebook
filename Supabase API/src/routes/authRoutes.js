@@ -9,15 +9,18 @@ router.post("/signup", async (req, res) => {
   const { email, password, nombre } = req.body;
 
   // Crear usuario en Supabase Auth
-  const { user, error: signUpError } = await supabase.auth.signUp({
+  const { data: authData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
   });
 
   if (signUpError) return res.status(400).json({ error: signUpError.message });
 
+  const user = authData.user;
+
   // Usar la función insert_usuario de Supabase para insertar el usuario en la tabla
   const { data, error: insertError } = await supabase.rpc("insert_usuario", {
+    p_id_usuario: user.id,
     p_nombre: nombre,
     p_email: user.email,
     p_password: password, // Almacenar la contraseña aquí puede no ser seguro; es mejor hashear la contraseña.
