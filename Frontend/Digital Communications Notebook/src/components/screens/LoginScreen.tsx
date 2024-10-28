@@ -13,9 +13,28 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onRegisterClick }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleLogin = () => {
-    // Lógica para manejar el login
-    console.log("Login:", { email, password });
+  const handleLogin = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Login failed. Please check your credentials.");
+      }
+
+      const data = await response.json();
+      console.log("Login successful:", data);
+      // Save session token or redirect the user
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      console.error("Login error:", errorMessage);
+      alert(errorMessage);
+    }
   };
 
   return (
