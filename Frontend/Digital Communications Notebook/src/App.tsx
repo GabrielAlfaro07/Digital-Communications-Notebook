@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import LoginScreen from './components/LoginScreen';
-import RegisterScreen from './components/RegisterScreen';
+import React, { useState } from "react";
+import LoginScreen from "./components/screens/LoginScreen";
+import RegisterScreen from "./components/screens/RegisterAccountScreen";
 
 const App: React.FC = () => {
   const [showLogin, setShowLogin] = useState(true);

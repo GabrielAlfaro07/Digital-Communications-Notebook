@@ -1,4 +1,9 @@
+// src/screens/LoginScreen.tsx
 import React, { useState } from "react";
+import Title from "../titles/Title";
+import Input from "../inputs/Input";
+import LoginButton from "../buttons/LoginButton";
+import CreateNewAccountScreenButton from "../buttons/RegisterAccountScreenButton";
 
 interface LoginScreenProps {
   onRegisterClick: () => void;
@@ -15,30 +20,21 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onRegisterClick }) => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <h2 className="text-3xl font-bold mb-6">Login</h2>
-      <input
+      <Title>Login</Title>
+      <Input
         type="email"
-        className="p-2 mb-4 border rounded w-80"
-        placeholder="Correo"
+        placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <input
+      <Input
         type="password"
-        className="p-2 mb-4 border rounded w-80"
-        placeholder="Contraseña"
+        placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
-        onClick={handleLogin}
-      >
-        Login
-      </button>
-      <button className="text-blue-500 underline" onClick={onRegisterClick}>
-        Crear cuenta nueva
-      </button>
+      <LoginButton onClick={handleLogin} />
+      <CreateNewAccountScreenButton onClick={onRegisterClick} />
     </div>
   );
 };
