@@ -1,59 +1,45 @@
-// src/screens/LoginScreen.tsx
-import React, { useState } from "react";
-import Title from "../titles/Title";
-import Input from "../inputs/Input";
-import LoginButton from "../buttons/LoginButton";
-import CreateNewAccountScreenButton from "../buttons/RegisterAccountScreenButton";
+import React, { useState } from 'react';
 
 interface LoginScreenProps {
   onRegisterClick: () => void;
+  onAssignmentClick: () => void;
 }
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ onRegisterClick }) => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+const LoginScreen: React.FC<LoginScreenProps> = ({ onRegisterClick, onAssignmentClick }) => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
-  const handleLogin = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/auth/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Login failed. Please check your credentials.");
-      }
-
-      const data = await response.json();
-      console.log("Login successful:", data);
-      // Save session token or redirect the user
-    } catch (error) {
-      const errorMessage = (error as Error).message;
-      console.error("Login error:", errorMessage);
-      alert(errorMessage);
-    }
+  const handleLogin = () => {
+    // Lógica para manejar el login
+    console.log('Login:', { email, password });
   };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <Title>Login</Title>
-      <Input
+      <h2 className="text-3xl font-bold mb-6">Login</h2>
+      <input
         type="email"
-        placeholder="Email"
+        className="p-2 mb-4 border rounded w-64"
+        placeholder="Correo"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <Input
+      <input
         type="password"
-        placeholder="Password"
+        className="p-2 mb-4 border rounded w-64"
+        placeholder="Contraseña"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <LoginButton onClick={handleLogin} />
-      <CreateNewAccountScreenButton onClick={onRegisterClick} />
+      <button className="bg-blue-500 text-white px-4 py-2 rounded mb-4" onClick={handleLogin}>
+        Login
+      </button>
+      <button className="text-blue-500 underline mb-2" onClick={onRegisterClick}>
+        Crear cuenta nueva
+      </button>
+      <button className="text-blue-500 underline" onClick={onAssignmentClick}>
+        Ir a Crear Asignación
+      </button>
     </div>
   );
 };
