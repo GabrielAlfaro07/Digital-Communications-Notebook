@@ -29,6 +29,30 @@ router.get("/", authenticateUser, async (req, res) => {
   res.status(200).json({ user: data, guardian: guardianData });
 });
 
+// Select All (autenticado)
+router.get("/all", async (req, res) => {
+  const { id } = req.auth.user;
+
+  // Obtener información del usuario
+  const { data, error } = await supabase.rpc("select_usuarios", {
+    auth_user: id,
+  });
+
+  if (error) return res.status(400).json({ error });
+
+  // Obtener información del encargado
+  const { data: guardiansData, error: guardianError } = await supabase.rpc(
+    "select_encargados",
+    {
+      auth_user: id,
+    }
+  );
+
+  if (guardianError) return res.status(400).json({ error: guardianError });
+
+  res.status(200).json({ users: data, guardians: guardiansData });
+});
+
 // Insert
 router.post("/", authenticateUser, async (req, res) => {
   const { id } = req.auth.user;
