@@ -29,6 +29,30 @@ router.get("/", authenticateUser, async (req, res) => {
   res.status(200).json({ user: data, teacher: teacherData });
 });
 
+// Select (autenticado)
+router.get("/all", authenticateUser, async (req, res) => {
+  const { id } = req.auth.user;
+
+  // Obtener información del usuario
+  const { data, error } = await supabase.rpc("select_usuarios", {
+    auth_user: id,
+  });
+
+  if (error) return res.status(400).json({ error });
+
+  // Obtener información del docente
+  const { data: teachersData, error: teacherError } = await supabase.rpc(
+    "select_docentes",
+    {
+      auth_user: id,
+    }
+  );
+
+  if (teacherError) return res.status(400).json({ error: teacherError });
+
+  res.status(200).json({ users: data, teachers: teachersData });
+});
+
 // Insert
 router.post("/", authenticateUser, async (req, res) => {
   const { id } = req.auth.user;

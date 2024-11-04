@@ -17,6 +17,20 @@ router.get("/", authenticateUser, async (req, res) => {
   res.status(200).json(data);
 });
 
+// Select All (autenticado)
+router.get("/all", async (req, res) => {
+  const { id } = req.auth.user;
+
+  const { data, error } = await supabase.rpc("select_usuarios", {
+    auth_user: id,
+  });
+
+  if (error) return res.status(400).json({ error });
+  res.status(200).json(data);
+});
+
+module.exports = router;
+
 // Update (autenticado)
 router.put("/", authenticateUser, async (req, res) => {
   const { id } = req.auth.user;
