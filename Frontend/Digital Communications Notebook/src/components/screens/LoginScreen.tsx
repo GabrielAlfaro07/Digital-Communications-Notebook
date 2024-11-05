@@ -1,24 +1,24 @@
-// src/screens/LoginScreen.tsx
 import React, { useState } from "react";
 import Title from "../titles/Title";
 import Input from "../inputs/Input";
 import LoginButton from "../buttons/LoginButton";
 import CreateNewAccountScreenButton from "../buttons/RegisterAccountScreenButton";
+import { useNavigate } from "react-router-dom";
 
-interface LoginScreenProps {
-  onRegisterClick: () => void;
-  onAssignmentClick: () => void;
-}
-
-const LoginScreen: React.FC<LoginScreenProps> = ({
-  onRegisterClick,
-  onAssignmentClick,
-}) => {
+const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const navigate = useNavigate();
+
+  const handleRegister = () => {
+    navigate("/register");
+  };
+
+  const handleAssignment = () => {
+    navigate("/addAssignment");
+  };
 
   const handleLogin = () => {
-    // Lógica para manejar el login
     console.log("Login:", { email, password });
   };
 
@@ -39,8 +39,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
           onChange={(e) => setPassword(e.target.value)}
         />
         <LoginButton onClick={handleLogin} />
-        <CreateNewAccountScreenButton onClick={onRegisterClick} />
-        <button className="text-blue-500 underline" onClick={onAssignmentClick}>
+        <CreateNewAccountScreenButton onClick={handleRegister} />
+        <button className="text-blue-500 underline" onClick={handleAssignment}>
           Ir a Crear Asignación
         </button>
       </div>

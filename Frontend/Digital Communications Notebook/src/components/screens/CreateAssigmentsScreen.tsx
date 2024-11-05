@@ -1,9 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Input from "../inputs/Input";
 import Title from "../titles/Title";
 import Label from "../labels/Label";
+import { useNavigate } from "react-router-dom";
 
-// Function to manually generate a UUID
 const generateUUID = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
     const r = (Math.random() * 16) | 0;
@@ -12,13 +12,7 @@ const generateUUID = () => {
   });
 };
 
-interface CreateAssignmentScreenProps {
-  onBackClick: () => void;
-}
-
-const CreateAssignmentScreen: React.FC<CreateAssignmentScreenProps> = ({
-  onBackClick,
-}) => {
+const CreateAssignmentScreen: React.FC = () => {
   const [assignment, setAssignment] = useState({
     id_asignacion: generateUUID(),
     titulo: "",
@@ -27,6 +21,11 @@ const CreateAssignmentScreen: React.FC<CreateAssignmentScreenProps> = ({
     fecha_asignacion: "",
     fecha_entrega: "",
   });
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -49,7 +48,6 @@ const CreateAssignmentScreen: React.FC<CreateAssignmentScreenProps> = ({
           <p className="mb-4 text-gray-600">
             <strong>ID de Asignación:</strong> {assignment.id_asignacion}
           </p>
-
           <Label>Título:</Label>
           <Input
             type="text"
@@ -61,7 +59,6 @@ const CreateAssignmentScreen: React.FC<CreateAssignmentScreenProps> = ({
               })
             }
           />
-
           <Label>Descripción:</Label>
           <textarea
             name="descripcion"
@@ -69,7 +66,6 @@ const CreateAssignmentScreen: React.FC<CreateAssignmentScreenProps> = ({
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded-xl w-full focus:outline-none focus:border-blue-500"
           />
-
           <Label>Fecha de asignación:</Label>
           <Input
             type="date"
@@ -81,7 +77,6 @@ const CreateAssignmentScreen: React.FC<CreateAssignmentScreenProps> = ({
               })
             }
           />
-
           <Label>Fecha de entrega:</Label>
           <Input
             type="date"
@@ -96,7 +91,7 @@ const CreateAssignmentScreen: React.FC<CreateAssignmentScreenProps> = ({
           <div className="flex justify-between items-center mt-6">
             <button
               type="button"
-              onClick={onBackClick}
+              onClick={handleBack}
               className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
             >
               Volver

@@ -5,16 +5,19 @@ import Input from "../inputs/Input";
 import UserTypeDropdown from "../dropdowns/UserTypeDropdown";
 import RegisterButton from "../buttons/RegisterAccountButton";
 import BackToLoginButton from "../buttons/LoginScreenButton";
-interface RegisterScreenProps {
-  onBackClick: () => void;
-}
+import { useNavigate } from "react-router-dom";
 
-const RegisterScreen: React.FC<RegisterScreenProps> = ({ onBackClick }) => {
+const RegisterScreen: React.FC = () => {
   const [userType, setUserType] = useState<string>("estudiante");
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [extraField, setExtraField] = useState<string>("");
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   const handleRegister = async () => {
     try {
@@ -134,7 +137,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ onBackClick }) => {
         )}
 
         <RegisterButton onClick={handleRegister} />
-        <BackToLoginButton onClick={onBackClick} />
+        <BackToLoginButton onClick={handleBack} />
       </div>
     </div>
   );

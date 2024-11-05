@@ -1,34 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import LoginScreen from "./components/screens/LoginScreen";
 import RegisterScreen from "./components/screens/RegisterAccountScreen";
 import CreateAssignmentScreen from "./components/screens/CreateAssigmentsScreen";
+
 const App: React.FC = () => {
-  const [screen, setScreen] = useState<'login' | 'register' | 'assignment'>('login');
-
-  const handleRegisterClick = () => {
-    setScreen('register');
-  };
-
-  const handleBackToLogin = () => {
-    setScreen('login');
-  };
-
-  const handleGoToAssignment = () => {
-    setScreen('assignment');
-  };
-
   return (
-    <div>
-      {screen === 'login' && (
-        <LoginScreen onRegisterClick={handleRegisterClick} onAssignmentClick={handleGoToAssignment} />
-      )}
-      {screen === 'register' && (
-        <RegisterScreen onBackClick={handleBackToLogin} />
-      )}
-      {screen === 'assignment' && (
-        <CreateAssignmentScreen onBackClick={handleBackToLogin} />
-      )}
-    </div>
+    <Router>
+      <Routes>
+        {/* Redirect to login by default */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+
+        <Route path="/login" element={<LoginScreen />} />
+        <Route path="/register" element={<RegisterScreen />} />
+        <Route path="/addAssignment" element={<CreateAssignmentScreen />} />
+      </Routes>
+    </Router>
   );
 };
 
