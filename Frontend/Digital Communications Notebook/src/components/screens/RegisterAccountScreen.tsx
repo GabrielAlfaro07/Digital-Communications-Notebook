@@ -5,7 +5,6 @@ import Input from "../inputs/Input";
 import UserTypeDropdown from "../dropdowns/UserTypeDropdown";
 import RegisterButton from "../buttons/RegisterAccountButton";
 import BackToLoginButton from "../buttons/LoginScreenButton";
-
 interface RegisterScreenProps {
   onBackClick: () => void;
 }
@@ -86,55 +85,57 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ onBackClick }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <Title>Sign Up</Title>
-      <Input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <Input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <Input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <UserTypeDropdown value={userType} onChange={handleUserTypeChange} />
-
-      {userType === "estudiante" && (
+    <div className="flex flex-col items-center bg-gray-100">
+      <div className="flex flex-col items-center justify-center h-screen w-80">
+        <Title>Sign Up</Title>
         <Input
           type="text"
-          placeholder="Grade"
-          value={extraField}
-          onChange={(e) => setExtraField(e.target.value)}
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
-      )}
-      {userType === "encargado" && (
         <Input
-          type="tel"
-          placeholder="Phone Number"
-          value={extraField}
-          onChange={(e) => setExtraField(e.target.value)}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-      )}
-      {userType === "docente" && (
         <Input
-          type="text"
-          placeholder="Specialty"
-          value={extraField}
-          onChange={(e) => setExtraField(e.target.value)}
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
-      )}
+        <UserTypeDropdown value={userType} onChange={handleUserTypeChange} />
 
-      <RegisterButton onClick={handleRegister} />
-      <BackToLoginButton onClick={onBackClick} />
+        {userType === "estudiante" && (
+          <Input
+            type="text"
+            placeholder="Grade"
+            value={extraField}
+            onChange={(e) => setExtraField(e.target.value)}
+          />
+        )}
+        {userType === "encargado" && (
+          <Input
+            type="tel"
+            placeholder="Phone Number"
+            value={extraField}
+            onChange={(e) => setExtraField(e.target.value)}
+          />
+        )}
+        {userType === "docente" && (
+          <Input
+            type="text"
+            placeholder="Specialty"
+            value={extraField}
+            onChange={(e) => setExtraField(e.target.value)}
+          />
+        )}
+
+        <RegisterButton onClick={handleRegister} />
+        <BackToLoginButton onClick={onBackClick} />
+      </div>
     </div>
   );
 };

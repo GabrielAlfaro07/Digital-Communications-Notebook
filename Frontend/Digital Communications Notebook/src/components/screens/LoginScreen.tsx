@@ -23,25 +23,27 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <Title>Login</Title>
-      <Input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <Input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <LoginButton onClick={handleLogin} />
-      <CreateNewAccountScreenButton onClick={onRegisterClick} />
-      <button className="text-blue-500 underline" onClick={onAssignmentClick}>
-        Ir a Crear Asignación
-      </button>
+    <div className="flex flex-col items-center bg-gray-100">
+      <div className="flex flex-col items-center justify-center h-screen w-80">
+        <Title>Login</Title>
+        <Input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <LoginButton onClick={handleLogin} />
+        <CreateNewAccountScreenButton onClick={onRegisterClick} />
+        <button className="text-blue-500 underline" onClick={onAssignmentClick}>
+          Ir a Crear Asignación
+        </button>
+      </div>
     </div>
   );
 };

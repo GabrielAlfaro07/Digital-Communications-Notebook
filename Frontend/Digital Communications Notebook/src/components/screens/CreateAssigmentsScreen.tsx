@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Input from "../inputs/Input";
 import Title from "../titles/Title";
+import Label from "../labels/Label";
 
 // Function to manually generate a UUID
 const generateUUID = () => {
@@ -41,18 +42,15 @@ const CreateAssignmentScreen: React.FC<CreateAssignmentScreenProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-50 p-4">
-      <Title>Crear Asignación</Title>
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded-lg p-6 w-full max-w-lg"
-      >
-        <p className="mb-4 text-gray-600">
-          <strong>ID de Asignación:</strong> {assignment.id_asignacion}
-        </p>
+    <div className="flex flex-col items-center bg-gray-100">
+      <div className="flex flex-col items-center justify-center h-screen px-6 w-full max-w-3xl">
+        <Title>Crear Asignación</Title>
+        <form onSubmit={handleSubmit}>
+          <p className="mb-4 text-gray-600">
+            <strong>ID de Asignación:</strong> {assignment.id_asignacion}
+          </p>
 
-        <label className="block mb-4">
-          <span className="text-gray-700">Título:</span>
+          <Label>Título:</Label>
           <Input
             type="text"
             placeholder="Título de la Asignación"
@@ -63,20 +61,16 @@ const CreateAssignmentScreen: React.FC<CreateAssignmentScreenProps> = ({
               })
             }
           />
-        </label>
 
-        <label className="block mb-4">
-          <span className="text-gray-700">Descripción:</span>
+          <Label>Descripción:</Label>
           <textarea
             name="descripcion"
             value={assignment.descripcion}
             onChange={handleChange}
-            className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:border-blue-500"
+            className="mt-1 p-2 border border-gray-300 rounded-xl w-full focus:outline-none focus:border-blue-500"
           />
-        </label>
 
-        <label className="block mb-4">
-          <span className="text-gray-700">Fecha de Asignación:</span>
+          <Label>Fecha de asignación:</Label>
           <Input
             type="date"
             placeholder="Fecha de Asignación"
@@ -87,10 +81,8 @@ const CreateAssignmentScreen: React.FC<CreateAssignmentScreenProps> = ({
               })
             }
           />
-        </label>
 
-        <label className="block mb-4">
-          <span className="text-gray-700">Fecha de Entrega:</span>
+          <Label>Fecha de entrega:</Label>
           <Input
             type="date"
             placeholder="Fecha de Entrega"
@@ -101,24 +93,23 @@ const CreateAssignmentScreen: React.FC<CreateAssignmentScreenProps> = ({
               })
             }
           />
-        </label>
-
-        <div className="flex justify-between items-center mt-6">
-          <button
-            type="button"
-            onClick={onBackClick}
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-          >
-            Volver
-          </button>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Crear Asignación
-          </button>
-        </div>
-      </form>
+          <div className="flex justify-between items-center mt-6">
+            <button
+              type="button"
+              onClick={onBackClick}
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            >
+              Volver
+            </button>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Crear Asignación
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
