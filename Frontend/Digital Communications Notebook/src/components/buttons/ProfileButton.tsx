@@ -27,7 +27,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ name, email }) => {
 
       {/* Profile Display */}
       {isProfileOpen && (
-        <div className="absolute right-0 mt-2">
+        <div className="absolute right-0 mt-4">
           <Profile name={name} email={email} />
         </div>
       )}

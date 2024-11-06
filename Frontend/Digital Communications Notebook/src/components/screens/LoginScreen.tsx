@@ -19,13 +19,16 @@ const LoginScreen: React.FC = () => {
   };
 
   const handleLogin = () => {
+    navigate("/classes");
     console.log("Login:", { email, password });
   };
 
   return (
     <div className="flex flex-col items-center bg-gray-100">
       <div className="flex flex-col items-center justify-center h-screen w-80">
-        <Title>Login</Title>
+        <div className="mb-4">
+          <Title>Login</Title>
+        </div>
         <Input
           type="email"
           placeholder="Email"

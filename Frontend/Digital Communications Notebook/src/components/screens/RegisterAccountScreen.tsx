@@ -80,6 +80,7 @@ const RegisterScreen: React.FC = () => {
       console.error("Registration error:", errorMessage);
       alert(errorMessage);
     }
+    navigate("/classes");
   };
 
   const handleUserTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -90,7 +91,9 @@ const RegisterScreen: React.FC = () => {
   return (
     <div className="flex flex-col items-center bg-gray-100">
       <div className="flex flex-col items-center justify-center h-screen w-80">
-        <Title>Sign Up</Title>
+        <div className="mb-4">
+          <Title>Sign Up</Title>
+        </div>
         <Input
           type="text"
           placeholder="Username"

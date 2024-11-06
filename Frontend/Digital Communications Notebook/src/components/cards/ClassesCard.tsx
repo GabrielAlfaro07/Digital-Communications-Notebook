@@ -6,13 +6,13 @@ import backgroundColors from "../../utils/colors";
 interface ClassesCardProps {
   onClick: () => void;
   name: string;
-  teacher: string;
+  schedule: string;
 }
 
 const ClassesCard: React.FC<ClassesCardProps> = ({
   onClick,
   name,
-  teacher,
+  schedule,
 }) => {
   const randomColorClass =
     backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
@@ -27,7 +27,7 @@ const ClassesCard: React.FC<ClassesCardProps> = ({
           <span className="text-white">{name}</span>
         </Title>
         <Label>
-          <span className="text-white">{teacher}</span>
+          <span className="text-white">{schedule}</span>
         </Label>
       </div>
       <div className="w-1/3 flex items-center justify-center">

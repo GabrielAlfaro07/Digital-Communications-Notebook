@@ -43,7 +43,9 @@ const CreateAssignmentScreen: React.FC = () => {
   return (
     <div className="flex flex-col items-center bg-gray-100">
       <div className="flex flex-col items-center justify-center h-screen px-6 w-full max-w-3xl">
-        <Title>Crear Asignación</Title>
+        <div className="mb-4">
+          <Title>Crear Asignación</Title>
+        </div>
         <form onSubmit={handleSubmit}>
           <p className="mb-4 text-gray-600">
             <strong>ID de Asignación:</strong> {assignment.id_asignacion}
