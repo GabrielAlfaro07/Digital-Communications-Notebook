@@ -10,7 +10,9 @@ import LoginScreen from "./components/screens/LoginScreen";
 import RegisterScreen from "./components/screens/RegisterAccountScreen";
 import CreateAssignmentScreen from "./components/screens/CreateAssigmentsScreen";
 import ClassesScreen from "./components/screens/ClassesScreen";
-
+import AddClassScreen from "./components/screens/AddClassScreen";
+import AddStudentScreen from "./components/screens/AddStudentScreen";
+import StudentListScreen from "./components/screens/StudentListScreen";
 const App: React.FC = () => {
   return (
     <Router>
@@ -18,11 +20,13 @@ const App: React.FC = () => {
       <Routes>
         {/* Redirect to login by default */}
         <Route path="/" element={<Navigate to="/login" replace />} />
-
+        <Route path="/students" element={<StudentListScreen />} />
+        <Route path="/addStudent" element={<AddStudentScreen />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/register" element={<RegisterScreen />} />
         <Route path="/addAssignment" element={<CreateAssignmentScreen />} />
         <Route path="/classes" element={<ClassesScreen />} />
+        <Route path="/class" element={<AddClassScreen />} />
       </Routes>
     </Router>
   );

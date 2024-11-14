@@ -6,14 +6,16 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 interface AddButtonProps {
   onClick: () => void;
   hoverText?: string;
+  className?: string;
 }
 
-const AddButton: React.FC<AddButtonProps> = ({ onClick, hoverText }) => {
+const AddButton: React.FC<AddButtonProps> = ({ onClick, hoverText, className }) => {
   return (
     <button
       onClick={onClick}
       title={hoverText}
-      className="hover:bg-neutral-300 text-white py-3 px-4 rounded-full transition duration-300 ease-in-out"
+      className={`${className}`}
+      //texto a presentar en pantalla
     >
       <FontAwesomeIcon icon={faPlus} size="lg" />
     </button>
