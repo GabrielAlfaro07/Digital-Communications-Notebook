@@ -7,7 +7,9 @@ interface BackButtonProps {
 }
 
 const BackButton: React.FC<BackButtonProps> = ({ onClick }) => (
-  <Button onClick={onClick}>Back</Button>
+  <Button onClick={onClick} hoverText="Back">
+    Back
+  </Button>
 );
 
 export default BackButton;

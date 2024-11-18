@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Title from "../titles/Title";
 import ClassesCard from "../cards/ClassesCard";
+import AddClassButton from "../buttons/AddClassButton"; // Import the button
 import { useNavigate } from "react-router-dom";
 import { fetchUserClasses, ClassDetails } from "../../services/classesService";
 
@@ -31,9 +32,14 @@ const ClassesScreen: React.FC = () => {
 
   return (
     <div className="flex-grow flex flex-col items-center px-6 w-full max-w-6xl mx-auto mt-8">
-      {/* Title */}
-      <div className="mb-6 text-center">
-        <Title>My Classes</Title>
+      {/* Header Row */}
+      <div className="flex items-center justify-between w-full mb-6">
+        {/* Title */}
+        <div className="text-center flex-grow">
+          <Title>My Classes</Title>
+        </div>
+        {/* Add Class Button */}
+        <AddClassButton />
       </div>
 
       {/* Horizontal line below title */}

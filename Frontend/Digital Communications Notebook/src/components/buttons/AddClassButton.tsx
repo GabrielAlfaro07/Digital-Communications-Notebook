@@ -6,15 +6,10 @@ const AddClassButton: React.FC = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/class");
+    navigate("/addClass");
   };
 
-  return (
-    <AddButton
-      onClick={handleClick}
-      hoverText="Agregar nueva clase"
-    />
-  );
+  return <AddButton onClick={handleClick} hoverText="Add a new class" />;
 };
 
 export default AddClassButton;

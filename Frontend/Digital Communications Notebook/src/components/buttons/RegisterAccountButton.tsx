@@ -8,6 +8,10 @@ interface RegisterAccountButtonProps {
 
 const RegisterAccountButton: React.FC<RegisterAccountButtonProps> = ({
   onClick,
-}) => <Button onClick={onClick}>Sign up</Button>;
+}) => (
+  <Button onClick={onClick} hoverText="Sign Up">
+    Sign Up
+  </Button>
+);
 
 export default RegisterAccountButton;

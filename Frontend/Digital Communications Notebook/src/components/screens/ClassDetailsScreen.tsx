@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import AddAssignmentButton from "../buttons/AddAssigmentButton";
-import AddStudentButton from "../buttons/addStudentButton";
+import AddStudentButton from "../buttons/AddStudentButton";
 import StudentListButton from "../buttons/StudentListButton";
-import AssignmentCard from "../cards/AddAsigmentCard";
+import AssignmentsCard from "../cards/AsigmentsCard";
 import { fetchClassDetails, ClassDetails } from "../../services/classesService";
 import { Assignment } from "../../services/assignmentsService";
 import Title from "../titles/Title"; // Assuming Title is used for the header
@@ -80,36 +80,35 @@ const ClassDetailsScreen: React.FC = () => {
 
       {/* Assignments Section */}
       <div className="w-full">
-        {/* Active Assignments Title */}
-        <div className="mb-6">
-          <h3 className="text-2xl font-semibold text-gray-700 mb-3">
-            Assignments
-          </h3>
-          <hr className="border-t-1 border-gray-300 mb-6" />
-          {/* Section Line */}
-          <div className="flex justify-end mb-4">
-            <AddAssignmentButton />
+        {/* Active Assignments Title and Add Button in the same row */}
+        <div className="flex justify-between items-center">
+          <h3 className="text-2xl font-semibold text-gray-700">Assignments</h3>
+          <div className="w-40">
+            <AddAssignmentButton
+              onClick={() => navigate(`/addAssignment?classId=${classId}`)}
+            />
           </div>
-          {/* Active Assignments */}
-          <h4 className="text-xl font-semibold text-green-600 mb-3">Active</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            {assignments.length > 0 ? (
-              assignments.map((assignment, index) => (
-                <AssignmentCard key={index} assignment={assignment} />
-              ))
-            ) : (
-              <p className="text-gray-500">No active assignments</p>
-            )}
-          </div>
+        </div>
+        <hr className="border-t-1 border-gray-300 mb-6" />
+        {/* Active Assignments */}
+        <h4 className="text-xl font-semibold text-green-600 mb-3">Active</h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-4">
+          {assignments.length > 0 ? (
+            assignments.map((assignment, index) => (
+              <AssignmentsCard key={index} assignment={assignment} />
+            ))
+          ) : (
+            <p className="text-gray-500">No active assignments</p>
+          )}
         </div>
 
         {/* Expired Assignments */}
         <div className="mb-6">
           <h4 className="text-xl font-semibold text-red-600 mb-3">Expired</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {expiredAssignments.length > 0 ? (
               expiredAssignments.map((assignment, index) => (
-                <AssignmentCard key={index} assignment={assignment} />
+                <AssignmentsCard key={index} assignment={assignment} />
               ))
             ) : (
               <p className="text-gray-500">No expired assignments</p>
@@ -119,10 +118,18 @@ const ClassDetailsScreen: React.FC = () => {
       </div>
 
       {/* Class Options Section */}
-      <div className="w-full mt-8">
+      <div className="w-full">
         <div className="flex justify-between items-center">
-          <AddStudentButton />
-          <StudentListButton />
+          <div className="w-40">
+            <AddStudentButton
+              onClick={() => console.log("Add Student button")}
+            />
+          </div>
+          <div className="w-40">
+            <StudentListButton
+              onClick={() => console.log("Student list button")}
+            />
+          </div>
           <div className="w-20">
             <BackButton onClick={() => navigate("/classes")} />
           </div>

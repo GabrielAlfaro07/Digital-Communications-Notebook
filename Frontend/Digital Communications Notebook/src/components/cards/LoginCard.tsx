@@ -25,12 +25,14 @@ const LoginCard: React.FC<LoginCardProps> = ({
       </div>
       <Input
         type="email"
+        name="email"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
       <Input
         type="password"
+        name="password"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}

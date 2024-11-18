@@ -1,21 +1,15 @@
+// src/components/AddStudentButton.tsx
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import AddButton from "./AddButton";
+import Button from "./Button";
 
-const AddStudentButton: React.FC = () => {
-  const navigate = useNavigate();
+interface AddStudentButtonProps {
+  onClick: () => void;
+}
 
-  const handleClick = () => {
-    navigate("/addStudent");
-  };
-
-  return (
-    <AddButton
-      className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 hover:text-black"
-      onClick={handleClick}
-      hoverText="Agregar Estudiante"
-    />
-  );
-};
+const AddStudentButton: React.FC<AddStudentButtonProps> = ({ onClick }) => (
+  <Button onClick={onClick} hoverText="Add a new student">
+    Add Student
+  </Button>
+);
 
 export default AddStudentButton;

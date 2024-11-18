@@ -6,7 +6,11 @@ interface LogoutButtonProps {
 }
 
 const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
-  return <Button onClick={onLogout}>Log Out</Button>;
+  return (
+    <Button onClick={onLogout} hoverText="Log Out">
+      Log Out
+    </Button>
+  );
 };
 
 export default LogoutButton;

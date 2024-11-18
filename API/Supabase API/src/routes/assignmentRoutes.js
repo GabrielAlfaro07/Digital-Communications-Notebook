@@ -1,64 +1,90 @@
-// src/routes/assignmentsRoute.js
 const express = require("express");
-const supabase = require("../config/supabaseClient");
 const authenticateUser = require("../middlewares/authenticateUser");
+const supabase = require("../config/supabaseClient");
 
 const router = express.Router();
 
-// Select (autenticado)
-router.get("/", authenticateUser, async (req, res) => {
-  const { data, error } = await supabase.rpc("select_asignaciones");
+// Endpoint to fetch details of a specific assignment
+router.get("/:assignment_id", authenticateUser, async (req, res) => {
+  const { assignment_id } = req.params;
 
-  if (error) return res.status(400).json({ error });
+  try {
+    // Fetch assignment details
+    const { data: assignment, error } = await supabase
+      .from("Assignments")
+      .select("*") // Select all columns
+      .eq("assignment_id", assignment_id)
+      .single(); // Expect one result
 
-  res.status(200).json(data);
+    if (error) {
+      console.error("Error fetching assignment:", error.message);
+      return res.status(404).json({ error: "Assignment not found" });
+    }
+
+    res.status(200).json(assignment); // Return the assignment details
+  } catch (err) {
+    console.error("Unexpected error:", err.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
-// Insert
+// Endpoint to create a new assignment
 router.post("/", authenticateUser, async (req, res) => {
-  const { titulo, descripcion, fecha_asignacion, fecha_entrega } = req.body;
+  const { title, description, assigned_at, due_for, class_id } = req.body;
 
-  const { data, error } = await supabase.rpc("insert_asignacion", {
-    p_titulo: titulo,
-    p_descripcion: descripcion,
-    p_fecha_asignacion: fecha_asignacion,
-    p_fecha_entrega: fecha_entrega,
-  });
+  try {
+    // Validate input
+    if (!title || !description || !assigned_at || !due_for || !class_id) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
 
-  if (error) return res.status(400).json({ error });
+    const { data: newAssignment, error } = await supabase
+      .from("Assignments")
+      .insert([
+        {
+          title,
+          description,
+          assigned_at,
+          due_for,
+          class_id,
+          created_at: new Date().toISOString(), // Automatically set created_at
+        },
+      ])
+      .select()
+      .single(); // Return the inserted assignment
 
-  res.status(201).json({ message: "Asignación creada exitosamente", data });
+    if (error) {
+      console.error("Error creating assignment:", error.message);
+      return res.status(500).json({ error: "Failed to create assignment" });
+    }
+
+    res.status(201).json(newAssignment); // Return the newly created assignment
+  } catch (err) {
+    console.error("Unexpected error:", err.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
-// Update (autenticado)
-router.put("/:id", authenticateUser, async (req, res) => {
-  const { id } = req.params;
-  const { titulo, descripcion, fecha_asignacion, fecha_entrega } = req.body;
+// Endpoint to delete an assignment
+router.delete("/:assignment_id", authenticateUser, async (req, res) => {
+  const { assignment_id } = req.params;
 
-  const { data, error } = await supabase.rpc("update_asignacion", {
-    p_id_asignacion: id,
-    p_titulo: titulo,
-    p_descripcion: descripcion,
-    p_fecha_asignacion: fecha_asignacion,
-    p_fecha_entrega: fecha_entrega,
-  });
+  try {
+    const { error } = await supabase
+      .from("Assignments")
+      .delete()
+      .eq("assignment_id", assignment_id);
 
-  if (error) return res.status(400).json({ error });
+    if (error) {
+      console.error("Error deleting assignment:", error.message);
+      return res.status(500).json({ error: "Failed to delete assignment" });
+    }
 
-  res.status(200).json({ message: "Asignación actualizada", data });
-});
-
-// Delete (autenticado)
-router.delete("/:id", authenticateUser, async (req, res) => {
-  const { id } = req.params;
-
-  const { data, error } = await supabase.rpc("delete_asignacion", {
-    p_id_asignacion: id,
-  });
-
-  if (error) return res.status(400).json({ error });
-
-  res.status(200).json({ message: "Asignación eliminada", data });
+    res.status(200).json({ message: "Assignment deleted successfully" });
+  } catch (err) {
+    console.error("Unexpected error:", err.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 module.exports = router;

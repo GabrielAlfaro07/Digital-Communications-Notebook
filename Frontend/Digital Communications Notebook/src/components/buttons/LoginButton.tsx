@@ -7,7 +7,9 @@ interface LoginButtonProps {
 }
 
 const LoginButton: React.FC<LoginButtonProps> = ({ onClick }) => (
-  <Button onClick={onClick}>Log in</Button>
+  <Button onClick={onClick} hoverText="Log In">
+    Log in
+  </Button>
 );
 
 export default LoginButton;

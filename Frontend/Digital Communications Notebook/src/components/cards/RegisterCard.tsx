@@ -61,18 +61,21 @@ const RegisterCard: React.FC<RegisterCardProps> = ({
       </div>
       <Input
         type="text"
+        name="username"
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
       <Input
         type="email"
+        name="email"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
       <Input
         type="password"
+        name="password"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}

@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import UniversalHeader from "./components/headers/UniversalHeader"; // Import your header component
 import { fetchUserData, UserProfile } from "./services/usersService"; // Import the fetchUserData function
-import CreateAssignmentScreen from "./components/screens/CreateAssigmentsScreen";
 import ClassesScreen from "./components/screens/ClassesScreen";
 import AddClassScreen from "./components/screens/AddClassScreen";
 import AddStudentScreen from "./components/screens/AddStudentScreen";
@@ -16,6 +15,7 @@ import StudentListScreen from "./components/screens/StudentListScreen";
 import LoginRegisterScreen from "./components/screens/LoginRegisterScreen";
 import "react-toastify/dist/ReactToastify.css";
 import ClassDetailsScreen from "./components/screens/ClassDetailsScreen";
+import AddAssignmentScreen from "./components/screens/AddAssignmentScreen";
 
 const MainContent: React.FC = () => {
   const location = useLocation();
@@ -47,10 +47,10 @@ const MainContent: React.FC = () => {
   // Mapping of pathnames to header titles
   const pathnameToTitle: Record<string, string> = {
     "/classes": "Classes",
-    "/class": "Class Details",
+    "/addClass": "Add Class",
     "/students": "Student List",
     "/addStudent": "Add Student",
-    "/addAssignment": "Create Assignment",
+    "/addAssignment": "Add Assignment",
   };
 
   // Check if the path matches the dynamic class route
@@ -83,8 +83,8 @@ const MainContent: React.FC = () => {
         <Route path="/class/:classId" element={<ClassDetailsScreen />} />
         <Route path="/students" element={<StudentListScreen />} />
         <Route path="/addStudent" element={<AddStudentScreen />} />
-        <Route path="/addAssignment" element={<CreateAssignmentScreen />} />
-        <Route path="/class" element={<AddClassScreen />} />
+        <Route path="/addAssignment" element={<AddAssignmentScreen />} />
+        <Route path="/addClass" element={<AddClassScreen />} />
       </Routes>
     </>
   );
