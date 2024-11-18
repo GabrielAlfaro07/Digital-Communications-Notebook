@@ -1,62 +1,52 @@
-// src/routes/classesRoute.js
 const express = require("express");
-const supabase = require("../config/supabaseClient");
 const authenticateUser = require("../middlewares/authenticateUser");
+const supabase = require("../config/supabaseClient");
 
 const router = express.Router();
 
-// Select (autenticado)
-router.get("/", authenticateUser, async (req, res) => {
-  const { data, error } = await supabase.rpc("select_clases");
+// Endpoint to fetch classes for the authenticated user
+router.get("/me", authenticateUser, async (req, res) => {
+  console.log("Authenticated user:", req.auth); // Log the authenticated user
+  try {
+    const userId = req.auth.user.id;
 
-  if (error) return res.status(400).json({ error });
+    // Query to fetch classes where the authenticated user is the teacher
+    const { data: classes, error } = await supabase
+      .from("Classes")
+      .select(
+        `class_id, name, day, start_time, end_time, Grades (grade_id, name)`
+      )
+      .eq("teacher_id", userId); // Filter by teacher_id for the authenticated user
 
-  res.status(200).json(data);
-});
+    if (error) {
+      console.error("Error fetching classes:", error.message);
+      return res.status(500).json({ error: "Failed to fetch classes" });
+    }
 
-// Insert
-router.post("/", authenticateUser, async (req, res) => {
-  const { nombre, horario, id_docente } = req.body;
+    // Now, retrieve the username for the authenticated user
+    const { data: user, error: userError } = await supabase
+      .from("Users")
+      .select("username")
+      .eq("user_id", userId)
+      .single(); // Use single() to get just one user
 
-  const { data, error } = await supabase.rpc("insert_clase", {
-    p_nombre: nombre,
-    p_horario: horario,
-    p_id_docente: id_docente,
-  });
+    if (userError) {
+      console.error("Error fetching user:", userError.message);
+      return res.status(500).json({ error: "Failed to fetch user details" });
+    }
 
-  if (error) return res.status(400).json({ error });
+    // Attach the username to each class object
+    const response = classes.map((classItem) => ({
+      ...classItem,
+      teacher_username: user.username, // Attach the teacher's username
+    }));
 
-  res.status(201).json({ message: "Clase creada exitosamente", data });
-});
-
-// Update (autenticado)
-router.put("/:id", authenticateUser, async (req, res) => {
-  const { id } = req.params;
-  const { nombre, horario, id_docente } = req.body;
-
-  const { data, error } = await supabase.rpc("update_clase", {
-    p_id_clase: id,
-    p_nombre: nombre,
-    p_horario: horario,
-    p_id_docente: id_docente,
-  });
-
-  if (error) return res.status(400).json({ error });
-
-  res.status(200).json({ message: "Clase actualizada", data });
-});
-
-// Delete (autenticado)
-router.delete("/:id", authenticateUser, async (req, res) => {
-  const { id } = req.params;
-
-  const { data, error } = await supabase.rpc("delete_clase", {
-    p_id_clase: id,
-  });
-
-  if (error) return res.status(400).json({ error });
-
-  res.status(200).json({ message: "Clase eliminada", data });
+    // Return the updated classes with the teacher's username
+    res.status(200).json(response); // Always return 200 OK
+  } catch (error) {
+    console.error("Unexpected error:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 module.exports = router;

@@ -1,6 +1,9 @@
 import React from "react";
 import Title from "../titles/Title";
 import Label from "../labels/Label";
+import LogoutButton from "../buttons/LogoutButton"; // Assuming the LogoutButton is in the "buttons" folder
+import { useNavigate } from "react-router-dom"; // To navigate after sign-out
+import { signOut } from "../../services/authService"; // Assuming you are importing the signOut function from usersService
 
 interface ProfileProps {
   name: string;
@@ -17,6 +20,21 @@ const Profile: React.FC<ProfileProps> = ({
   userRole,
   userGrade,
 }) => {
+  const navigate = useNavigate(); // Initialize navigation hook
+
+  // Function to handle logout
+  const handleLogout = async () => {
+    try {
+      await signOut(); // Call the signOut function from your service
+      console.log("Logged out successfully");
+
+      // After logging out, navigate to the login/register page
+      navigate("/login-register"); // You can replace "/login" with the appropriate route for login/register
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col text-center text-black items-center bg-white shadow-md rounded-2xl p-6 w-64">
       <img
@@ -31,6 +49,9 @@ const Profile: React.FC<ProfileProps> = ({
       <Label>{email}</Label>
       <Label>{userRole}</Label>
       <Label>{userGrade}</Label>
+
+      {/* Add LogoutButton component */}
+      <LogoutButton onLogout={handleLogout} />
     </div>
   );
 };

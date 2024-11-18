@@ -5,14 +5,22 @@ import backgroundColors from "../../utils/colors";
 
 interface ClassesCardProps {
   onClick: () => void;
-  name: string;
-  schedule: string;
+  className: string;
+  gradeName: string;
+  day: string;
+  startTime: string;
+  endTime: string;
+  teacherName: string;
 }
 
 const ClassesCard: React.FC<ClassesCardProps> = ({
   onClick,
-  name,
-  schedule,
+  className,
+  gradeName,
+  day,
+  startTime,
+  endTime,
+  teacherName,
 }) => {
   const randomColorClass =
     backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
@@ -20,22 +28,41 @@ const ClassesCard: React.FC<ClassesCardProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`flex items-start justify-between rounded-2xl ${randomColorClass} p-4 shadow-md cursor-pointer w-full max-w-md hover:opacity-90 transition-opacity`}
+      className={`flex flex-col rounded-2xl ${randomColorClass} p-4 shadow-md cursor-pointer w-full max-w-md hover:opacity-90 transition-opacity relative`}
+      style={{
+        backgroundImage: 'url("src/assets/class_logo.png")', // Path to your background image (ensure it's in the public folder)
+        backgroundSize: "contain", // Resize the background image while maintaining aspect ratio
+        backgroundPosition: "right center", // Position it to the right and center it vertically
+        backgroundRepeat: "no-repeat", // Prevent repeating the background image
+        backgroundAttachment: "scroll", // Make it scroll with the card (removes the fixed effect)
+      }}
     >
-      <div className="flex flex-col justify-between w-2/3">
+      {/* Optional overlay */}
+      <div className="absolute inset-0 bg-black opacity-10 rounded-2xl"></div>
+
+      <div className="flex justify-between items-center mb-2 relative z-10">
         <Title>
-          <span className="text-white">{name}</span>
+          <span className="text-white">{className}</span>
         </Title>
         <Label>
-          <span className="text-white">{schedule}</span>
+          <span className="text-white">{gradeName}</span>
         </Label>
       </div>
-      <div className="w-1/3 flex items-center justify-center">
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/1760/1760647.png"
-          alt="Class Icon"
-          className="h-20 w-20 object-contain"
-        />
+
+      {/* Second Row: Schedule */}
+      <div className="mb-2 relative z-10">
+        <Label>
+          <span className="text-white">
+            {day}, {startTime} - {endTime}
+          </span>
+        </Label>
+      </div>
+
+      {/* Third Row: Teacher Name */}
+      <div className="relative z-10">
+        <Label>
+          <span className="text-white">Teacher: {teacherName}</span>
+        </Label>
       </div>
     </div>
   );

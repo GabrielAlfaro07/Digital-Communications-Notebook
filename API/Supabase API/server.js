@@ -16,12 +16,12 @@ app.use(express.json());
 const gradesRoutes = require("./src/routes/gradesRoutes");
 const rolesRoutes = require("./src/routes/rolesRoutes");
 const userRoutes = require("./src/routes/userRoutes");
+const classesRoutes = require("./src/routes/classesRoutes");
 
 const studentRoutes = require("./src/routes/studentRoutes");
 const guardianRoutes = require("./src/routes/guardianRoutes");
 const teacherRoutes = require("./src/routes/teacherRoutes");
 const assignmentRoutes = require("./src/routes/assignmentRoutes");
-const classesRoutes = require("./src/routes/classesRoutes");
 const classesStudentsRoutes = require("./src/routes/classesStudentsRoutes");
 const classesAssignmentsRoutes = require("./src/routes/classesAssignmentsRoutes");
 const assignmentsStudentsRoutes = require("./src/routes/assignmentsStudentsRoutes");
@@ -30,11 +30,11 @@ const assignmentsStudentsRoutes = require("./src/routes/assignmentsStudentsRoute
 app.use("/api/grades", gradesRoutes);
 app.use("/api/roles", rolesRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/classes", classesRoutes);
 
 app.use("/api/estudiantes", studentRoutes);
 app.use("/api/encargados", guardianRoutes);
 app.use("/api/docentes", teacherRoutes);
-app.use("/api/clases", classesRoutes);
 app.use("/api/asignaciones", assignmentRoutes);
 app.use("/api/clases-estudiantes", classesStudentsRoutes);
 app.use("/api/clases-asignaciones", classesAssignmentsRoutes);

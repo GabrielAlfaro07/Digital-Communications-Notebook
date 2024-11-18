@@ -114,19 +114,25 @@ export const signIn = async (
  * Sign out the current user
  */
 export const signOut = async (): Promise<void> => {
-  const { error } = await supabase.auth.signOut();
-
-  if (error) throw new Error(error.message);
-
-  // Optional: Update user's status to offline
+  // Get the current authenticated user
   const { data: user, error: userError } = await supabase.auth.getUser();
 
-  if (userError || !user) throw new Error("Failed to fetch user data.");
+  if (userError || !user) {
+    throw new Error("Failed to fetch user data.");
+  }
 
+  // Update the user's status to 'offline'
   const { error: statusError } = await supabase
     .from("Users")
     .update({ status: "offline" })
     .eq("user_id", user.user.id);
 
   if (statusError) throw new Error("Failed to update user status.");
+
+  // Now that the status has been updated, sign the user out
+  const { error: signOutError } = await supabase.auth.signOut();
+
+  if (signOutError) throw new Error(signOutError.message);
+
+  console.log("User logged out and status updated to offline.");
 };
