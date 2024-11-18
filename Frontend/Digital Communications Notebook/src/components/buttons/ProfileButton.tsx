@@ -6,9 +6,18 @@ import Profile from "../profile/Profile";
 interface ProfileButtonProps {
   name: string;
   email: string;
+  profilePicture: string;
+  userRole: string;
+  userGrade: string;
 }
 
-const ProfileButton: React.FC<ProfileButtonProps> = ({ name, email }) => {
+const ProfileButton: React.FC<ProfileButtonProps> = ({
+  name,
+  email,
+  profilePicture,
+  userRole,
+  userGrade,
+}) => {
   const [isProfileOpen, setProfileOpen] = useState(false);
 
   const handleProfileToggle = () => {
@@ -28,7 +37,13 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ name, email }) => {
       {/* Profile Display */}
       {isProfileOpen && (
         <div className="absolute right-0 mt-4">
-          <Profile name={name} email={email} />
+          <Profile
+            name={name}
+            email={email}
+            profilePicture={profilePicture}
+            userRole={userRole}
+            userGrade={userGrade}
+          />
         </div>
       )}
     </div>

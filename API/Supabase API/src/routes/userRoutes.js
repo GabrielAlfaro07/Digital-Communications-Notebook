@@ -1,68 +1,38 @@
-// src/routes/userRoutes.js
 const express = require("express");
-const supabase = require("../config/supabaseClient");
 const authenticateUser = require("../middlewares/authenticateUser");
+const supabase = require("../config/supabaseClient");
 
 const router = express.Router();
 
-// Select (autenticado)
-router.get("/", authenticateUser, async (req, res) => {
-  const { id } = req.auth.user;
+router.get("/me", authenticateUser, async (req, res) => {
+  try {
+    // Use the authenticated user's ID from the middleware
+    const userId = req.auth.user.id;
 
-  const { data, error } = await supabase.rpc("select_usuario", {
-    auth_user: id,
-  });
+    // Query user data with related roles and grades
+    const { data: userData, error: userFetchError } = await supabase
+      .from("Users")
+      .select(
+        `user_id, username, email, information, status, profile_picture_url, created_at, Grades (grade_id, name), Roles (role_id, name)`
+      )
+      .eq("user_id", userId)
+      .single();
 
-  if (error) return res.status(400).json({ error });
-  res.status(200).json(data);
-});
+    if (userFetchError) {
+      return res.status(500).json({ error: userFetchError.message });
+    }
 
-// Select All (autenticado)
-router.get("/all", async (req, res) => {
-  const { id } = req.auth.user;
+    if (!userData) {
+      return res.status(404).json({ error: "User not found." });
+    }
 
-  const { data, error } = await supabase.rpc("select_usuarios", {
-    auth_user: id,
-  });
-
-  if (error) return res.status(400).json({ error });
-  res.status(200).json(data);
-});
-
-module.exports = router;
-
-// Update (autenticado)
-router.put("/", authenticateUser, async (req, res) => {
-  const { id } = req.auth.user;
-  const { nombre, email } = req.body;
-
-  const { data, error } = await supabase.rpc("update_usuario", {
-    auth_user: id,
-    p_nombre: nombre,
-    p_email: email,
-  });
-
-  if (error) return res.status(400).json({ error });
-  res.status(200).json({ message: "Usuario actualizado", data });
-});
-
-// Delete (autenticado)
-router.delete("/", authenticateUser, async (req, res) => {
-  const { id } = req.auth.user;
-
-  const { error: deleteAuthError } = await supabase.auth.admin.deleteUser(id);
-
-  if (deleteAuthError)
-    return res.status(400).json({ error: deleteAuthError.message });
-
-  const { data, error: deleteDbError } = await supabase.rpc("delete_usuario", {
-    auth_user: id,
-  });
-
-  if (deleteDbError)
-    return res.status(400).json({ error: deleteDbError.message });
-
-  res.status(200).json({ message: "Usuario eliminado", data });
+    return res.json(userData);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the user data." });
+  }
 });
 
 module.exports = router;

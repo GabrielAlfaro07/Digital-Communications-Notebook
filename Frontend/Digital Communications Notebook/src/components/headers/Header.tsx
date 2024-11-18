@@ -1,8 +1,12 @@
 import React from "react";
 
-const Header: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+interface HeaderProps {
+  children: React.ReactNode;
+}
+
+const Header: React.FC<HeaderProps> = ({ children }) => {
   return (
-    <header className="bg-gray-800 text-white h-16 flex items-center justify-between px-4 relative">
+    <header className="flex items-center justify-between w-full px-4 py-2 border-b border-gray-300">
       {children}
     </header>
   );

@@ -2,16 +2,25 @@
 const supabase = require("../config/supabaseClient");
 
 const authenticateUser = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
 
-  if (!token) return res.status(401).json({ error: "No token provided" });
+    if (!token) {
+      return res.status(401).json({ error: "No token provided" });
+    }
 
-  const { data: user, error } = await supabase.auth.getUser(token);
+    const { data: user, error } = await supabase.auth.getUser(token);
 
-  if (error || !user) return res.status(401).json({ error: "Unauthorized" });
+    if (error || !user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
 
-  req.auth = user;
-  next();
+    req.auth = user; // Attach user info to request
+    next();
+  } catch (error) {
+    console.error("Authentication error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 module.exports = authenticateUser;

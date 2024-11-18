@@ -13,8 +13,10 @@ app.use(cors());
 app.use(express.json());
 
 // Importar rutas
-const authRoutes = require("./src/routes/authRoutes");
+const gradesRoutes = require("./src/routes/gradesRoutes");
+const rolesRoutes = require("./src/routes/rolesRoutes");
 const userRoutes = require("./src/routes/userRoutes");
+
 const studentRoutes = require("./src/routes/studentRoutes");
 const guardianRoutes = require("./src/routes/guardianRoutes");
 const teacherRoutes = require("./src/routes/teacherRoutes");
@@ -25,8 +27,10 @@ const classesAssignmentsRoutes = require("./src/routes/classesAssignmentsRoutes"
 const assignmentsStudentsRoutes = require("./src/routes/assignmentsStudentsRoutes");
 
 // Usar las rutas
-app.use("/auth", authRoutes);
-app.use("/api/usuarios", userRoutes);
+app.use("/api/grades", gradesRoutes);
+app.use("/api/roles", rolesRoutes);
+app.use("/api/users", userRoutes);
+
 app.use("/api/estudiantes", studentRoutes);
 app.use("/api/encargados", guardianRoutes);
 app.use("/api/docentes", teacherRoutes);
@@ -38,5 +42,5 @@ app.use("/api/asignaciones-estudiantes", assignmentsStudentsRoutes);
 
 // Iniciar el servidor
 app.listen(port, () => {
-  console.log(`Servidor escuchando en el puerto ${port}`);
+  console.log(`Server running on http://localhost:${port}`);
 });

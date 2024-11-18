@@ -7,23 +7,32 @@ import SidebarButton from "../buttons/SidebarButton";
 interface ClassesScreenHeaderProps {
   profileName: string;
   profileEmail: string;
+  profilePicture: string;
+  userRole: string;
+  userGrade: string;
 }
 
 const ClassesScreenHeader: React.FC<ClassesScreenHeaderProps> = ({
   profileName,
   profileEmail,
+  profilePicture,
+  userRole,
+  userGrade,
 }) => {
   return (
     <Header>
       <div className="flex items-center">
         <SidebarButton />
       </div>
-      <h1 className="absolute left-1/2 transform -translate-x-1/2 text-lg font-bold">
-        Classes
-      </h1>
       <div className="flex items-center space-x-2">
-        <AddClassButton onClick={() => console.log("Add class clicked")} />
-        <ProfileButton name={profileName} email={profileEmail} />
+        <AddClassButton />
+        <ProfileButton
+          name={profileName}
+          email={profileEmail}
+          profilePicture={profilePicture}
+          userRole={userRole}
+          userGrade={userGrade}
+        />
       </div>
     </Header>
   );

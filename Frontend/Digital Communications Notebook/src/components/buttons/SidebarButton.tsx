@@ -15,7 +15,7 @@ const SidebarButton: React.FC = () => {
       {/* Sidebar Toggle Button */}
       <button
         onClick={toggleSidebar}
-        className="text-white px-3 py-2 rounded-full hover:bg-blue-600 transition duration-300 ease-in-out"
+        className="text-black px-3 py-2 rounded-full hover:bg-blue-600 transition duration-300 ease-in-out"
       >
         <FontAwesomeIcon icon={faBars} size="lg" />
       </button>

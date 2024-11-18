@@ -6,11 +6,19 @@ interface ProfileProps {
   name: string;
   email: string;
   profilePicture?: string;
+  userRole: string;
+  userGrade: string;
 }
 
-const Profile: React.FC<ProfileProps> = ({ name, email, profilePicture }) => {
+const Profile: React.FC<ProfileProps> = ({
+  name,
+  email,
+  profilePicture,
+  userRole,
+  userGrade,
+}) => {
   return (
-    <div className="flex flex-col text-black items-center bg-white shadow-md rounded-2xl p-6 w-60">
+    <div className="flex flex-col text-center text-black items-center bg-white shadow-md rounded-2xl p-6 w-64">
       <img
         src={
           profilePicture ||
@@ -21,6 +29,8 @@ const Profile: React.FC<ProfileProps> = ({ name, email, profilePicture }) => {
       />
       <Title>{name}</Title>
       <Label>{email}</Label>
+      <Label>{userRole}</Label>
+      <Label>{userGrade}</Label>
     </div>
   );
 };
