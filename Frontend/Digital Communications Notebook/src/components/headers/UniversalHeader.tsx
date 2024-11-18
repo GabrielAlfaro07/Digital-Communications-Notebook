@@ -1,20 +1,21 @@
 import React from "react";
 import Header from "./Header";
-import AddClassButton from "../buttons/AddClassButton";
-import ProfileButton from "../buttons/ProfileButton";
 import SidebarButton from "../buttons/SidebarButton";
+import ProfileButton from "../buttons/ProfileButton";
 
-interface ClassesScreenHeaderProps {
+interface UniversalHeaderProps {
+  title: string; // Title displayed in the center
   profileName?: string;
   profileEmail?: string;
   profilePicture?: string;
   userRole?: string;
   userGrade?: string;
   isLoading?: boolean;
-  errorMessage?: string;
+  errorMessage?: string | null;
 }
 
-const ClassesScreenHeader: React.FC<ClassesScreenHeaderProps> = ({
+const UniversalHeader: React.FC<UniversalHeaderProps> = ({
+  title,
   profileName = "Loading...",
   profileEmail = "Loading...",
   profilePicture = "",
@@ -25,14 +26,18 @@ const ClassesScreenHeader: React.FC<ClassesScreenHeaderProps> = ({
 }) => {
   return (
     <Header>
+      {/* Left Side: Sidebar Button */}
       <div className="flex items-center">
         <SidebarButton />
       </div>
+
+      {/* Center: Title */}
       <h1 className="absolute left-1/2 transform -translate-x-1/2 text-lg font-bold">
-        Classes
+        {title}
       </h1>
+
+      {/* Right Side: Profile Button */}
       <div className="flex items-center space-x-2">
-        <AddClassButton />
         {isLoading ? (
           <div className="text-sm text-gray-500">Loading profile...</div>
         ) : errorMessage ? (
@@ -51,4 +56,4 @@ const ClassesScreenHeader: React.FC<ClassesScreenHeaderProps> = ({
   );
 };
 
-export default ClassesScreenHeader;
+export default UniversalHeader;

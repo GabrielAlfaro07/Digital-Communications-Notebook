@@ -3,7 +3,7 @@ import AssignmentCard from "../cards/AddAsigmentCard";
 import AddAssignmentButton from "../buttons/AddAssigmentButton";
 import AddStudentButton from "../buttons/addStudentButton";
 import StudentListButton from "../buttons/StudentListButton";
-import ComeBackButton from "../buttons/ComeBackButton";
+import ComeBackButton from "../buttons/BackButton";
 const AddClassScreen: React.FC = () => {
   interface Assignment {
     title: string;
@@ -12,7 +12,9 @@ const AddClassScreen: React.FC = () => {
   }
 
   const [assignments, setAssignments] = useState<Assignment[]>([]);
-  const [expiredAssignments, setExpiredAssignments] = useState<Assignment[]>([]);
+  const [expiredAssignments, setExpiredAssignments] = useState<Assignment[]>(
+    []
+  );
 
   // Quemar datos de prueba al montar el componente
   useEffect(() => {
@@ -28,23 +30,26 @@ const AddClassScreen: React.FC = () => {
     setAssignments(assignmentsData);
     setExpiredAssignments(expiredAssignmentsData);
   }, []);
-  
+
   return (
     <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
       {/* Header de la clase */}
       <div className="w-full max-w-4xl mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-3xl font-bold text-gray-800">Clase de Matemáticas</h2>
+          <h2 className="text-3xl font-bold text-gray-800">
+            Clase de Matemáticas
+          </h2>
           <AddStudentButton />
           <StudentListButton />
-            
         </div>
         <hr className="border-t-2 border-gray-300" />
       </div>
 
       {/* Contenedor de Asignaciones */}
       <div className="w-full max-w-4xl">
-        <h3 className="text-2xl font-semibold text-gray-700 mb-4">Asignaciones</h3>
+        <h3 className="text-2xl font-semibold text-gray-700 mb-4">
+          Asignaciones
+        </h3>
         {/* Botón para agregar asignación */}
         <div className="flex justify-end mt-4">
           <AddAssignmentButton />
@@ -77,9 +82,9 @@ const AddClassScreen: React.FC = () => {
           </div>
         </div>
         <div className="flex justify-end mt-4">
-          <ComeBackButton 
+          <ComeBackButton
             className="bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
-            onClick={() => console.log('ComeBackButton clicked')}
+            onClick={() => console.log("ComeBackButton clicked")}
           />
         </div>
       </div>

@@ -49,4 +49,49 @@ router.get("/me", authenticateUser, async (req, res) => {
   }
 });
 
+// Endpoint to fetch details for a specific class
+router.get("/:class_id", authenticateUser, async (req, res) => {
+  console.log("Authenticated user:", req.auth); // Log the authenticated user
+  const { class_id } = req.params;
+
+  try {
+    // Fetch the class details
+    const { data: classDetails, error: classError } = await supabase
+      .from("Classes")
+      .select(
+        `class_id, name, day, start_time, end_time, Grades (grade_id, name), teacher_id`
+      )
+      .eq("class_id", class_id)
+      .single(); // Expecting one result
+
+    if (classError) {
+      console.error("Error fetching class details:", classError.message);
+      return res.status(404).json({ error: "Class not found" });
+    }
+
+    // Fetch the teacher's username separately
+    const { data: teacher, error: teacherError } = await supabase
+      .from("Users")
+      .select("username")
+      .eq("user_id", classDetails.teacher_id)
+      .single(); // Expecting one result
+
+    if (teacherError) {
+      console.error("Error fetching teacher's username:", teacherError.message);
+      return res.status(500).json({ error: "Failed to fetch teacher details" });
+    }
+
+    // Combine the data
+    const response = {
+      ...classDetails,
+      teacher_username: teacher.username, // Attach the teacher's username
+    };
+
+    res.status(200).json(response); // Return the class details
+  } catch (error) {
+    console.error("Unexpected error:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 module.exports = router;

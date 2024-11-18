@@ -2,9 +2,10 @@ import React from "react";
 import Title from "../titles/Title";
 import Label from "../labels/Label";
 import backgroundColors from "../../utils/colors";
+import { useNavigate } from "react-router-dom";
 
 interface ClassesCardProps {
-  onClick: () => void;
+  classId: string;
   className: string;
   gradeName: string;
   day: string;
@@ -14,7 +15,7 @@ interface ClassesCardProps {
 }
 
 const ClassesCard: React.FC<ClassesCardProps> = ({
-  onClick,
+  classId,
   className,
   gradeName,
   day,
@@ -22,19 +23,25 @@ const ClassesCard: React.FC<ClassesCardProps> = ({
   endTime,
   teacherName,
 }) => {
-  const randomColorClass =
-    backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
+  const navigate = useNavigate();
+
+  // Generate persistent color based on `classId`
+  const colorIndex = parseInt(classId.slice(-1), 16) % backgroundColors.length;
+  const colorClass = backgroundColors[colorIndex];
+
+  const handleCardClick = () => {
+    navigate(`/class/${classId}`);
+  };
 
   return (
     <div
-      onClick={onClick}
-      className={`flex flex-col rounded-2xl ${randomColorClass} p-4 shadow-md cursor-pointer w-full max-w-md hover:opacity-90 transition-opacity relative`}
+      onClick={handleCardClick}
+      className={`flex flex-col rounded-2xl ${colorClass} p-4 shadow-md cursor-pointer w-full max-w-md hover:opacity-90 transition-opacity relative`}
       style={{
-        backgroundImage: 'url("src/assets/class_logo.png")', // Path to your background image (ensure it's in the public folder)
-        backgroundSize: "contain", // Resize the background image while maintaining aspect ratio
-        backgroundPosition: "right center", // Position it to the right and center it vertically
-        backgroundRepeat: "no-repeat", // Prevent repeating the background image
-        backgroundAttachment: "scroll", // Make it scroll with the card (removes the fixed effect)
+        backgroundImage: 'url("src/assets/class_logo.png")',
+        backgroundSize: "contain",
+        backgroundPosition: "right center",
+        backgroundRepeat: "no-repeat",
       }}
     >
       {/* Optional overlay */}
