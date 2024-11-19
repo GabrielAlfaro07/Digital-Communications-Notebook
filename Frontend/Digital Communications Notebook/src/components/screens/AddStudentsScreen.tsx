@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Title from "../titles/Title";
-import Label from "../labels/Label";
 import {
   fetchStudentsWithSameGrade,
   addStudentsToClass,
@@ -9,6 +8,7 @@ import {
 import AddNewStudentButton from "../buttons/AddNewStudentButton"; // Assuming this button exists
 import BackButton from "../buttons/BackButton";
 import { toast } from "react-toastify";
+import StudentListHeader from "../headers/StudentListHeader";
 
 interface Student {
   user_id: string; // Match the database field
@@ -119,18 +119,20 @@ const AddStudentScreen: React.FC = () => {
         </div>
       )}
 
+      {/* Student List with Header */}
       {!loading && !error && students.length > 0 && (
-        <div className="w-full">
-          <Label>Select Students to Add</Label>
-          <ul className="divide-y divide-gray-200 bg-white p-6 rounded-lg shadow-lg">
+        <div className="w-full bg-white rounded-lg shadow-lg">
+          <StudentListHeader />
+          <ul className="divide-y divide-gray-200">
             {students.map((student) => (
               <li
                 key={student.user_id}
-                className="py-4 flex justify-between items-center"
+                className="py-4 flex justify-between items-center px-6"
               >
-                <span className="text-gray-700">{student.username}</span>
-                {/* Email displayed in the middle */}
-                <span className="text-gray-500 text-sm">{student.email}</span>
+                <span className="text-gray-700 w-1/2">{student.username}</span>
+                <span className="text-gray-500 text-sm w-1/2">
+                  {student.email}
+                </span>
                 <input
                   type="checkbox"
                   checked={selectedStudents.has(student.user_id)}

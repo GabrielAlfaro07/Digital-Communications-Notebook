@@ -6,6 +6,7 @@ import AddStudentButton from "../buttons/AddStudentButton";
 import Title from "../titles/Title";
 import Label from "../labels/Label"; // Assuming Label is used for displaying class details
 import BackButton from "../buttons/BackButton";
+import StudentListHeader from "../headers/StudentListHeader";
 
 interface Student {
   user_id: string; // Match the database field
@@ -105,19 +106,20 @@ const StudentListScreen: React.FC = () => {
         </div>
       )}
 
-      {/* Student List */}
+      {/* Student List with Header */}
       {!loading && !error && students.length > 0 && (
-        <div className="w-full">
-          <ul className="divide-y divide-gray-200 bg-white p-6 rounded-lg shadow-lg">
+        <div className="w-full bg-white rounded-lg shadow-lg">
+          <StudentListHeader />
+          <ul className="divide-y divide-gray-200">
             {students.map((student) => (
               <li
                 key={student.user_id}
-                className="py-4 flex justify-between items-center"
+                className="py-4 flex justify-between items-center px-6"
               >
-                <div className="flex flex-col">
-                  <span className="text-gray-700">{student.username}</span>
-                  <span className="text-gray-500 text-sm">{student.email}</span>
-                </div>
+                <span className="text-gray-700 w-1/2">{student.username}</span>
+                <span className="text-gray-500 text-sm w-1/2">
+                  {student.email}
+                </span>
               </li>
             ))}
           </ul>
