@@ -33,13 +33,16 @@ const ClassesScreen: React.FC = () => {
   return (
     <div className="flex-grow flex flex-col items-center px-6 w-full max-w-6xl mx-auto mt-8">
       {/* Header Row */}
-      <div className="flex items-center justify-between w-full mb-6">
+      <div className="relative flex items-center w-full mb-6">
         {/* Title */}
-        <div className="text-center flex-grow">
+        <div className="absolute left-1/2 transform -translate-x-1/2">
           <Title>My Classes</Title>
         </div>
-        {/* Add Class Button */}
-        <AddClassButton />
+
+        {/* Add Student Button */}
+        <div className="ml-auto">
+          <AddClassButton />
+        </div>
       </div>
 
       {/* Horizontal line below title */}

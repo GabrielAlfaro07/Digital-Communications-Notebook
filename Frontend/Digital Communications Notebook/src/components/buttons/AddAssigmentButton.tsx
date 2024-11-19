@@ -1,6 +1,6 @@
 // src/components/AddStudentButton.tsx
 import React from "react";
-import Button from "./Button";
+import AddButton from "./AddButton";
 
 interface AddAssignmentButtonProps {
   onClick: () => void;
@@ -8,10 +8,6 @@ interface AddAssignmentButtonProps {
 
 const AddAssignmentButton: React.FC<AddAssignmentButtonProps> = ({
   onClick,
-}) => (
-  <Button onClick={onClick} hoverText="Add a new assignment">
-    Add Assignment
-  </Button>
-);
+}) => <AddButton onClick={onClick} hoverText="Add a new assignment" />;
 
 export default AddAssignmentButton;

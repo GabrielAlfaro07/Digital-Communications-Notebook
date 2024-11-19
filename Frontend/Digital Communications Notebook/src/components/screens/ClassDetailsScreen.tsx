@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import AddAssignmentButton from "../buttons/AddAssigmentButton";
-import AddStudentButton from "../buttons/AddStudentButton";
 import StudentListButton from "../buttons/StudentListButton";
 import AssignmentsCard from "../cards/AsigmentsCard";
 import { fetchClassDetails, ClassDetails } from "../../services/classesService";
@@ -81,13 +80,11 @@ const ClassDetailsScreen: React.FC = () => {
       {/* Assignments Section */}
       <div className="w-full">
         {/* Active Assignments Title and Add Button in the same row */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mb-4">
           <h3 className="text-2xl font-semibold text-gray-700">Assignments</h3>
-          <div className="w-40">
-            <AddAssignmentButton
-              onClick={() => navigate(`/addAssignment?classId=${classId}`)}
-            />
-          </div>
+          <AddAssignmentButton
+            onClick={() => navigate(`/addAssignment?classId=${classId}`)}
+          />
         </div>
         <hr className="border-t-1 border-gray-300 mb-6" />
         {/* Active Assignments */}
@@ -121,13 +118,8 @@ const ClassDetailsScreen: React.FC = () => {
       <div className="w-full">
         <div className="flex justify-between items-center">
           <div className="w-40">
-            <AddStudentButton
-              onClick={() => console.log("Add Student button")}
-            />
-          </div>
-          <div className="w-40">
             <StudentListButton
-              onClick={() => console.log("Student list button")}
+              onClick={() => navigate(`/students?classId=${classId}`)}
             />
           </div>
           <div className="w-20">

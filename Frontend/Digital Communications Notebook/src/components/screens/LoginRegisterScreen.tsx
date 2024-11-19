@@ -37,13 +37,39 @@ const LoginRegisterScreen: React.FC = () => {
 
   const handleRegister = async () => {
     try {
-      const user = await signUp(registerEmail, registerPassword, {
+      // Ensure role is selected
+      if (!role) {
+        toast.error("Please select a role.");
+        return;
+      }
+
+      // Validate grade for students
+      if (role.toLowerCase() === "student" && !grade) {
+        toast.error("Please select a grade for the student.");
+        return;
+      }
+
+      const currentGrade = grade; // Capture grade explicitly
+      console.log("Captured grade_id:", currentGrade); // Debugging log
+      console.log("Captured role:", role);
+
+      // Construct additional data
+      const additionalData = {
         username,
         information: null,
         role_id: role,
-        grade_id: role === "estudiante" ? grade : null,
+        grade_id:
+          role === "de9333c1-bae7-4677-99d1-c82b5097ffe5" ? grade : null,
         profile_picture_url: null,
-      });
+      };
+
+      console.log("Additional data being sent:", additionalData); // Debugging log
+
+      const user = await signUp(
+        registerEmail,
+        registerPassword,
+        additionalData
+      );
 
       toast.success("Registration successful!");
       console.log("Registered user:", user);

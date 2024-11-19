@@ -47,6 +47,18 @@ export const signUp = async (
 
   if (!data.user) throw new Error("User creation failed");
 
+  console.log("Inserting into Users table:", {
+    user_id: data.user.id,
+    email,
+    username: additionalData.username,
+    information: additionalData.information || null,
+    role_id: additionalData.role_id || null,
+    grade_id: additionalData.grade_id || null, // Debug grade_id here
+    profile_picture_url: additionalData.profile_picture_url || null,
+    status: "offline",
+    created_at: new Date().toISOString(),
+  });
+
   const { error: dbError } = await supabase.from("Users").insert({
     user_id: data.user.id,
     email,

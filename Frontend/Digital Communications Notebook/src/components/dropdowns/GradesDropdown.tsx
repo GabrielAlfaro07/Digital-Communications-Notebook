@@ -46,6 +46,8 @@ const GradesDropdown: React.FC<GradesDropdownProps> = ({ value, onChange }) => {
   if (loading) return <p>Loading grades...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  console.log("Selected grade_id:", value);
+
   return (
     <Dropdown value={value} onChange={onChange}>
       <DropdownItem value="">Select a grade</DropdownItem>

@@ -6,14 +6,13 @@ import {
   useLocation,
   matchPath,
 } from "react-router-dom";
-import UniversalHeader from "./components/headers/UniversalHeader"; // Import your header component
-import { fetchUserData, UserProfile } from "./services/usersService"; // Import the fetchUserData function
+import UniversalHeader from "./components/headers/UniversalHeader";
+import { fetchUserData, UserProfile } from "./services/usersService";
 import ClassesScreen from "./components/screens/ClassesScreen";
 import AddClassScreen from "./components/screens/AddClassScreen";
-import AddStudentScreen from "./components/screens/AddStudentScreen";
+import AddStudentsScreen from "./components/screens/AddStudentsScreen";
 import StudentListScreen from "./components/screens/StudentListScreen";
 import LoginRegisterScreen from "./components/screens/LoginRegisterScreen";
-import "react-toastify/dist/ReactToastify.css";
 import ClassDetailsScreen from "./components/screens/ClassDetailsScreen";
 import AddAssignmentScreen from "./components/screens/AddAssignmentScreen";
 
@@ -25,24 +24,24 @@ const MainContent: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Fetch user data when the component mounts
+  // Fetch user data when the component mounts or when the route changes to `/classes`
   useEffect(() => {
     const loadUserData = async () => {
       try {
+        setIsLoading(true);
         const profile = await fetchUserData();
-        if (profile) {
-          setUserProfile(profile);
-        } else {
-          setErrorMessage("Failed to load user profile.");
-        }
+        setUserProfile(profile || null);
       } catch (error) {
         setErrorMessage("Error fetching user data.");
       } finally {
         setIsLoading(false);
       }
     };
-    loadUserData();
-  }, []);
+
+    if (location.pathname === "/classes") {
+      loadUserData();
+    }
+  }, [location.pathname]);
 
   // Mapping of pathnames to header titles
   const pathnameToTitle: Record<string, string> = {
@@ -82,7 +81,7 @@ const MainContent: React.FC = () => {
         <Route path="/classes" element={<ClassesScreen />} />
         <Route path="/class/:classId" element={<ClassDetailsScreen />} />
         <Route path="/students" element={<StudentListScreen />} />
-        <Route path="/addStudent" element={<AddStudentScreen />} />
+        <Route path="/addStudent" element={<AddStudentsScreen />} />
         <Route path="/addAssignment" element={<AddAssignmentScreen />} />
         <Route path="/addClass" element={<AddClassScreen />} />
       </Routes>
