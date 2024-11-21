@@ -5,7 +5,7 @@ import { View } from "react-native";
 
 const Dropdown = ({ value, onChange, items }) => {
   return (
-    <View className="w-full my-4">
+    <View className="w-full mt-4 border border-gray-300 rounded">
       <RNPickerSelect
         value={value}
         onValueChange={(selectedValue) => {
@@ -15,18 +15,12 @@ const Dropdown = ({ value, onChange, items }) => {
         items={items}
         style={{
           inputAndroid: {
-            paddingVertical: 2,
             paddingHorizontal: 12,
-            borderWidth: 1,
-            borderColor: "#D1D5DB", // Equivalent to `border-gray-300`
             borderRadius: 8,
             width: "100%",
           },
           inputIOS: {
-            paddingVertical: 2,
             paddingHorizontal: 12,
-            borderWidth: 3,
-            borderColor: "#D1D5DB", // Equivalent to `border-gray-300`
             borderRadius: 8,
             width: "100%",
           },

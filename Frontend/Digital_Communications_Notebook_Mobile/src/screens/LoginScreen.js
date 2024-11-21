@@ -4,15 +4,26 @@ import Input from "../components/inputs/Input";
 import Button from "../components/buttons/Button";
 import TextButton from "../components/buttons/TextButton";
 import { useNavigation } from "@react-navigation/native";
+import { signIn } from "../services/authService"; // Ensure the correct path to authService
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    // Logic for logging in
-    console.log("Login:", { email, password });
+  const handleLogin = async () => {
+    try {
+      // Call the signIn service
+      const { session, user } = await signIn(email, password);
+
+      console.log("Logged in:", { session, user });
+
+      // After a successful login, navigate to the "Home" screen
+      navigation.navigate("Home");
+    } catch (error) {
+      console.error("Login error:", error.message);
+      // Optionally, display an error message to the user
+    }
   };
 
   return (

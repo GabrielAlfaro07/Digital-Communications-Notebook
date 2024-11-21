@@ -9,7 +9,32 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware global
-app.use(cors());
+
+// Define allowed origins
+const allowedOrigins = [
+  "http://localhost:3000", // React web app (local)
+  "http://localhost:19006", // React Native app (Expo local)
+  "http://192.168.1.100:19006", // React Native app on physical device
+  "http://10.0.2.2:19006", // React Native app on Android emulator
+];
+
+// CORS configuration
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g., mobile apps or server-to-server)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, // If you want to allow cookies or authorization headers
+};
+
+// Apply CORS middleware
+app.use(cors(corsOptions));
+
+// Middleware to parse JSON
 app.use(express.json());
 
 // Importar rutas
@@ -41,6 +66,6 @@ app.use("/api/clases-asignaciones", classesAssignmentsRoutes);
 app.use("/api/asignaciones-estudiantes", assignmentsStudentsRoutes);
 
 // Iniciar el servidor
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Server running on http://localhost:${port}`);
 });
