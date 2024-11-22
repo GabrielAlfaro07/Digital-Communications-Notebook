@@ -19,7 +19,7 @@ const LoginScreen = () => {
       console.log("Logged in:", { session, user });
 
       // After a successful login, navigate to the "Home" screen
-      navigation.navigate("Home");
+      navigation.navigate("Classes");
     } catch (error) {
       console.error("Login error:", error.message);
       // Optionally, display an error message to the user

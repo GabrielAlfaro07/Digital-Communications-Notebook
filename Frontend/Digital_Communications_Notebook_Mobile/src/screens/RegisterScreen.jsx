@@ -82,7 +82,7 @@ const RegisterScreen = () => {
       console.log("User registered:", user);
 
       // After a successful registration, navigate to the "Home" screen
-      navigation.navigate("Home");
+      navigation.navigate("Classes");
     } catch (error) {
       console.error("Registration error:", error.message);
       // Optionally, display an error message to the user

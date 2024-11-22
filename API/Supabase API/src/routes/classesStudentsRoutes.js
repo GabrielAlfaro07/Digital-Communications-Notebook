@@ -1,49 +1,85 @@
-// src/routes/studentClassesRoutes.js
 const express = require("express");
-const supabase = require("../config/supabaseClient");
 const authenticateUser = require("../middlewares/authenticateUser");
+const supabase = require("../config/supabaseClient");
 
 const router = express.Router();
 
-// Select (authenticated)
-router.get("/", authenticateUser, async (req, res) => {
-  const { data, error } = await supabase.rpc("select_clases_estudiantes");
+// Endpoint to fetch classes for a student
+router.get("/me", authenticateUser, async (req, res) => {
+  try {
+    const studentId = req.auth.user.id; // Get the authenticated student's ID
 
-  if (error) return res.status(400).json({ error });
+    // Step 1: Fetch classes where the student is enrolled
+    const { data: enrolledClasses, error: enrolledClassesError } =
+      await supabase
+        .from("Classes_Students")
+        .select("class_id")
+        .eq("student_id", studentId);
 
-  res.status(200).json(data);
-});
+    if (enrolledClassesError) {
+      console.error(
+        "Error fetching enrolled classes:",
+        enrolledClassesError.message
+      );
+      return res
+        .status(500)
+        .json({ error: "Failed to fetch enrolled classes" });
+    }
 
-// Insert
-router.post("/", authenticateUser, async (req, res) => {
-  const { id_estudiante, id_clase } = req.body;
+    if (!enrolledClasses || enrolledClasses.length === 0) {
+      return res.status(200).json([]); // Return an empty array if the student is not enrolled in any class
+    }
 
-  const { data, error } = await supabase.rpc("insert_clases_estudiantes", {
-    p_id_estudiante: id_estudiante,
-    p_id_clase: id_clase,
-  });
+    const classIds = enrolledClasses.map((enrolled) => enrolled.class_id);
 
-  if (error) return res.status(400).json({ error });
+    // Step 2: Fetch detailed class information
+    const { data: classes, error: classesError } = await supabase
+      .from("Classes")
+      .select(
+        `class_id, name, day, start_time, end_time, Grades (grade_id, name), teacher_id`
+      )
+      .in("class_id", classIds);
 
-  res
-    .status(201)
-    .json({ message: "Estudiante-Clase registrado exitosamente", data });
-});
+    if (classesError) {
+      console.error("Error fetching class details:", classesError.message);
+      return res.status(500).json({ error: "Failed to fetch class details" });
+    }
 
-// Delete (authenticated)
-router.delete("/", authenticateUser, async (req, res) => {
-  const { id_estudiante, id_clase } = req.body;
+    // Step 3: Fetch the usernames of the teachers for the classes
+    const teacherIds = [
+      ...new Set(classes.map((classItem) => classItem.teacher_id)),
+    ];
 
-  const { data, error } = await supabase.rpc("delete_clases_estudiantes", {
-    p_id_estudiante: id_estudiante,
-    p_id_clases: id_clase,
-  });
+    const { data: teachers, error: teachersError } = await supabase
+      .from("Users")
+      .select("user_id, username")
+      .in("user_id", teacherIds);
 
-  if (error) return res.status(400).json({ error });
+    if (teachersError) {
+      console.error(
+        "Error fetching teachers' usernames:",
+        teachersError.message
+      );
+      return res.status(500).json({ error: "Failed to fetch teacher details" });
+    }
 
-  res
-    .status(200)
-    .json({ message: "Registro de Estudiante-Clase eliminado", data });
+    // Create a map of teacher IDs to usernames for quick lookup
+    const teacherMap = Object.fromEntries(
+      teachers.map((teacher) => [teacher.user_id, teacher.username])
+    );
+
+    // Step 4: Attach the teacher's username to each class
+    const response = classes.map((classItem) => ({
+      ...classItem,
+      teacher_username: teacherMap[classItem.teacher_id] || "Unknown",
+    }));
+
+    // Step 5: Return the enriched class data
+    res.status(200).json(response);
+  } catch (error) {
+    console.error("Unexpected error:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 module.exports = router;

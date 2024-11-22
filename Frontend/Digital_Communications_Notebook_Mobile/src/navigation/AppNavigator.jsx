@@ -7,6 +7,7 @@ import HomeScreen from "../screens/HomeScreen";
 import AssignmentsScreen from "../screens/AssignmentsScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
+import ClassesScreen from "../screens/ClassesScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ const AppNavigator = () => {
 
   // Map screen names to header titles
   const screenToTitle = {
+    Classes: "Classes",
     Home: "Home",
     Assignments: "Assignments",
   };
@@ -60,6 +62,7 @@ const AppNavigator = () => {
       >
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="Classes" component={ClassesScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Assignments" component={AssignmentsScreen} />
       </Stack.Navigator>
