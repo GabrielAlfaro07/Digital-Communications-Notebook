@@ -1,18 +1,24 @@
 import { supabase } from "../../supabaseClient";
 
 export interface Assignment {
-  assignment_id: string; // Unique ID for the assignment
-  title: string; // Title of the assignment
-  description: string; // Description of the assignment
-  assigned_at: string; // Timestamp when the assignment was assigned
-  due_for: string; // Timestamp for when the assignment is due
-  created_at?: string; // Timestamp when the assignment was created
-  class_id?: string; // Class ID associated with the assignment
+  assignment_id: string;
+  title: string;
+  description: string;
+  assigned_at: string;
+  due_for: string;
+  created_at?: string;
+  class_id?: string;
+  documents?: {
+    document_id: string;
+    file_url: string;
+    file_type: string;
+    uploaded_by: string;
+    associated_with: string;
+  }[];
 }
 
-const BASE_URL = "http://localhost:5000/api/assignments"; // Base URL for assignment API endpoints
+const BASE_URL = "http://localhost:5000/api/assignments";
 
-// Helper to get the Supabase session token
 const getToken = async (): Promise<string> => {
   const session = await supabase.auth.getSession();
   const token = session?.data?.session?.access_token;
@@ -25,7 +31,7 @@ const getToken = async (): Promise<string> => {
 };
 
 /**
- * Fetches the details of a specific assignment by ID.
+ * Fetches the details of a specific assignment by ID, including documents.
  * @param assignmentId - The ID of the assignment to fetch
  * @returns A Promise resolving to the assignment details
  */

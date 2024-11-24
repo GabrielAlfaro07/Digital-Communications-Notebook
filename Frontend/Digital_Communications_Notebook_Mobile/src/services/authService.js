@@ -51,12 +51,17 @@ export const signUp = async (email, password, additionalData) => {
  * @returns {Promise<Object>} The session and user data
  */
 export const signIn = async (email, password) => {
+  console.log("Attempting login...");
   const { data: session, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error("Sign-in error:", error.message);
+    throw new Error(error.message);
+  }
+  console.log("Session data:", session);
 
   const { data: userData, error: fetchError } = await supabase
     .from("Users")
@@ -64,15 +69,21 @@ export const signIn = async (email, password) => {
     .eq("email", email)
     .single();
 
-  if (fetchError || !userData)
+  if (fetchError) {
+    console.error("User fetch error:", fetchError.message);
     throw new Error("User not found in the database.");
+  }
+  console.log("User data:", userData);
 
   const { error: statusError } = await supabase
     .from("Users")
     .update({ status: "online" })
     .eq("user_id", userData.user_id);
 
-  if (statusError) throw new Error("Failed to update user status.");
+  if (statusError) {
+    console.error("Status update error:", statusError.message);
+    throw new Error("Failed to update user status.");
+  }
 
   return { session, user: userData };
 };

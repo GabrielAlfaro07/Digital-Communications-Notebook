@@ -27,14 +27,13 @@ const ClassesCard = ({
   const colorClass = backgroundColors[colorIndex];
 
   const handleCardPress = () => {
-    console.log("Card pressed");
-    //navigation.navigate("ClassDetails", { classId });
+    navigation.navigate("ClassDetails", { classId }); // Navigate to ClassDetails with classId
   };
 
   return (
     <TouchableOpacity
       onPress={handleCardPress}
-      className={`flex flex-col rounded-2xl ${colorClass} p-4 shadow-md w-full max-w-md relative`}
+      className={`flex flex-col rounded-2xl ${colorClass} p-4 w-full max-w-md relative`}
     >
       {/* Background Image */}
       <ImageBackground

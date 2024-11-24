@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
-import UniversalHeader from "../components/headers/UniversalHeader"; // Adapted for React Native
-import { fetchUserData } from "../services/usersService"; // Import your user fetching service
-import HomeScreen from "../screens/HomeScreen";
-import AssignmentsScreen from "../screens/AssignmentsScreen";
+import UniversalHeader from "../components/headers/UniversalHeader";
+import { fetchUserData } from "../services/usersService";
+import AssignmentDetailsScreen from "../screens/AssignmentDetailsScreen"; // Import the new screen
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import ClassesScreen from "../screens/ClassesScreen";
+import ClassDetailsScreen from "../screens/ClassDetailsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +16,6 @@ const AppNavigator = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  // Fetch user data
   useEffect(() => {
     const loadUserData = async () => {
       try {
@@ -33,11 +32,10 @@ const AppNavigator = () => {
     loadUserData();
   }, []);
 
-  // Map screen names to header titles
   const screenToTitle = {
     Classes: "Classes",
-    Home: "Home",
-    Assignments: "Assignments",
+    ClassDetails: "Class Details",
+    AssignmentDetails: "Assignment Details",
   };
 
   return (
@@ -63,8 +61,11 @@ const AppNavigator = () => {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Classes" component={ClassesScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Assignments" component={AssignmentsScreen} />
+        <Stack.Screen name="ClassDetails" component={ClassDetailsScreen} />
+        <Stack.Screen
+          name="AssignmentDetails"
+          component={AssignmentDetailsScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

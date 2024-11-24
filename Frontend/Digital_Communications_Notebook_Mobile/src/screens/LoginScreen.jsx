@@ -13,16 +13,12 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      // Call the signIn service
       const { session, user } = await signIn(email, password);
-
       console.log("Logged in:", { session, user });
-
-      // After a successful login, navigate to the "Home" screen
       navigation.navigate("Classes");
     } catch (error) {
       console.error("Login error:", error.message);
-      // Optionally, display an error message to the user
+      alert(`Login failed: ${error.message}`); // Display error to the user
     }
   };
 

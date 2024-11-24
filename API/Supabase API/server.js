@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 
 // Define allowed origins
 const allowedOrigins = [
-  "http://localhost:3000", // React web app (local)
+  "http://localhost:5173", // React web app (local)
   "http://localhost:19006", // React Native app (Expo local)
   "http://192.168.1.100:19006", // React Native app on physical device
   "http://10.0.2.2:19006", // React Native app on Android emulator

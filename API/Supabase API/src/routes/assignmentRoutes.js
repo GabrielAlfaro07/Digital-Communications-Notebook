@@ -10,18 +10,56 @@ router.get("/:assignment_id", authenticateUser, async (req, res) => {
 
   try {
     // Fetch assignment details
-    const { data: assignment, error } = await supabase
+    const { data: assignment, error: assignmentError } = await supabase
       .from("Assignments")
-      .select("*") // Select all columns
+      .select("*")
       .eq("assignment_id", assignment_id)
-      .single(); // Expect one result
+      .single();
 
-    if (error) {
-      console.error("Error fetching assignment:", error.message);
+    if (assignmentError || !assignment) {
+      console.error("Error fetching assignment:", assignmentError?.message);
       return res.status(404).json({ error: "Assignment not found" });
     }
 
-    res.status(200).json(assignment); // Return the assignment details
+    // Fetch related documents
+    const { data: documents, error: documentsError } = await supabase
+      .from("Assignments_Documents")
+      .select(
+        `
+        document_id,
+        Documents (
+          file_url,
+          file_type,
+          uploaded_by,
+          associated_with
+        )
+      `
+      )
+      .eq("assignment_id", assignment_id);
+
+    if (documentsError) {
+      console.error(
+        "Error fetching related documents:",
+        documentsError.message
+      );
+      return res
+        .status(500)
+        .json({ error: "Error fetching related documents" });
+    }
+
+    // Combine assignment and documents into a single response
+    const response = {
+      ...assignment,
+      documents: documents.map((doc) => ({
+        document_id: doc.document_id,
+        file_url: doc.Documents.file_url,
+        file_type: doc.Documents.file_type,
+        uploaded_by: doc.Documents.uploaded_by,
+        associated_with: doc.Documents.associated_with,
+      })),
+    };
+
+    res.status(200).json(response); // Return the combined response
   } catch (err) {
     console.error("Unexpected error:", err.message);
     res.status(500).json({ error: "Internal Server Error" });

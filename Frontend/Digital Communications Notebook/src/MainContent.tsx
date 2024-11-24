@@ -15,6 +15,7 @@ import StudentListScreen from "./components/screens/StudentListScreen";
 import LoginRegisterScreen from "./components/screens/LoginRegisterScreen";
 import ClassDetailsScreen from "./components/screens/ClassDetailsScreen";
 import AddAssignmentScreen from "./components/screens/AddAssignmentScreen";
+import AssignmentDetailsScreen from "./components/screens/AssignmentDetailsScreen";
 
 const MainContent: React.FC = () => {
   const location = useLocation();
@@ -52,12 +53,18 @@ const MainContent: React.FC = () => {
     "/addAssignment": "Add Assignment",
   };
 
-  // Check if the path matches the dynamic class route
-  const match = matchPath("/class/:classId", location.pathname);
+  // Check if the path matches the dynamic class or assignment route
+  const classMatch = matchPath("/class/:classId", location.pathname);
+  const assignmentMatch = matchPath(
+    "/assignment/:assignmentId",
+    location.pathname
+  );
 
   // Determine the title
-  const title = match
+  const title = classMatch
     ? "Class Details"
+    : assignmentMatch
+    ? "Assignment Details"
     : pathnameToTitle[location.pathname] || "Dashboard";
 
   return (
@@ -80,6 +87,10 @@ const MainContent: React.FC = () => {
         <Route path="/login-register" element={<LoginRegisterScreen />} />
         <Route path="/classes" element={<ClassesScreen />} />
         <Route path="/class/:classId" element={<ClassDetailsScreen />} />
+        <Route
+          path="/assignment/:assignmentId"
+          element={<AssignmentDetailsScreen />}
+        />
         <Route path="/students" element={<StudentListScreen />} />
         <Route path="/addStudent" element={<AddStudentsScreen />} />
         <Route path="/addAssignment" element={<AddAssignmentScreen />} />
