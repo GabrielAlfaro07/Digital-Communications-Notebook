@@ -45,6 +45,7 @@ const classesRoutes = require("./src/routes/classesRoutes");
 const assignmentRoutes = require("./src/routes/assignmentRoutes");
 const studentRoutes = require("./src/routes/studentRoutes");
 const classesStudentsRoutes = require("./src/routes/classesStudentsRoutes");
+const notificationsRoutes = require("./src/routes/notificationsRoutes");
 
 const guardianRoutes = require("./src/routes/guardianRoutes");
 const teacherRoutes = require("./src/routes/teacherRoutes");
@@ -59,6 +60,7 @@ app.use("/api/classes", classesRoutes);
 app.use("/api/assignments", assignmentRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/classes/students", classesStudentsRoutes);
+app.use("/api/notifications", notificationsRoutes);
 
 app.use("/api/encargados", guardianRoutes);
 app.use("/api/docentes", teacherRoutes);

@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "./Header";
-import SidebarButton from "../buttons/SidebarButton";
 import ProfileButton from "../buttons/ProfileButton";
+import NotificationsButton from "../buttons/NotificationsButton"; // Import the NotificationsButton
 
 interface UniversalHeaderProps {
   title: string; // Title displayed in the center
@@ -26,9 +26,9 @@ const UniversalHeader: React.FC<UniversalHeaderProps> = ({
 }) => {
   return (
     <Header>
-      {/* Left Side: Sidebar Button */}
-      <div className="flex items-center">
-        <SidebarButton />
+      {/* Left Side: Sidebar and Notifications Buttons */}
+      <div className="flex items-center space-x-4">
+        <NotificationsButton /> {/* Add NotificationsButton here */}
       </div>
 
       {/* Center: Title */}
