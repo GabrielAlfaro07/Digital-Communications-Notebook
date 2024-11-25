@@ -32,7 +32,7 @@ const UniversalHeader: React.FC<UniversalHeaderProps> = ({
       </div>
 
       {/* Center: Title */}
-      <h1 className="absolute left-1/2 transform -translate-x-1/2 text-lg font-bold">
+      <h1 className="absolute left-1/2 transform -translate-x-1/2 text-lg font-bold text-white">
         {title}
       </h1>
 

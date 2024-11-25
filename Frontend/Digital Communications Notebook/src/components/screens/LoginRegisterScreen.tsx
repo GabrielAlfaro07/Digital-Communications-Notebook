@@ -86,7 +86,13 @@ const LoginRegisterScreen: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row items-center justify-center h-screen bg-gray-100 space-y-4 lg:space-y-0 lg:space-x-8">
+    <div
+      className="flex flex-col lg:flex-row items-center justify-center h-screen space-y-4 lg:space-y-0 lg:space-x-8"
+      style={{
+        backgroundColor: "#02367b",
+      }}
+    >
+      {" "}
       <LoginCard
         email={loginEmail}
         password={loginPassword}

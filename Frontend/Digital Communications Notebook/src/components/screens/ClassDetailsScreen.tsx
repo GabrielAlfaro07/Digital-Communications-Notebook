@@ -42,88 +42,103 @@ const ClassDetailsScreen: React.FC = () => {
   if (!classDetails) return <p>Loading class details...</p>;
 
   return (
-    <div className="flex-grow flex flex-col items-center px-6 w-full max-w-6xl mx-auto mt-8">
-      {/* Title Section */}
-      <div className="mb-6 text-center">
-        <Title>{classDetails.name}</Title>
-      </div>
+    <div className="relative h-screen flex flex-col items-center w-full bg-gray-100">
+      {/* Background Image */}
+      <div
+        className="absolute top-0 left-0 h-1/3 w-full bg-cover bg-center opacity-50 z-0"
+        style={{
+          backgroundImage:
+            "url('https://images.squarespace-cdn.com/content/v1/5a00e57baeb625aaac139aad/1521840474358-8OGA2S5F1SMRLZHEUCWD/classroom-2787754_1920.jpg')",
+        }}
+      />
 
-      {/* Class Details Section */}
-      <div className="w-full mb-6">
-        {/* Class Information */}
-        <div className="flex flex-col items-center mb-4">
-          <div className="mb-2">
-            <Label>
-              <span className="text-gray-700">
-                Grade: {classDetails.Grades.name}
-              </span>
-            </Label>
-          </div>
-          <div className="mb-2">
-            <Label>
-              <span className="text-gray-700">
-                Schedule: {classDetails.day}, {classDetails.start_time} -{" "}
-                {classDetails.end_time}
-              </span>
-            </Label>
-          </div>
-          <div className="mb-2">
-            <Label>
-              <span className="text-gray-700">
-                Teacher: {classDetails.teacher_username}
-              </span>
-            </Label>
-          </div>
-        </div>
-      </div>
-
-      {/* Assignments Section */}
-      <div className="w-full">
-        {/* Active Assignments Title and Add Button in the same row */}
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-2xl font-semibold text-gray-700">Assignments</h3>
-          <AddAssignmentButton
-            onClick={() => navigate(`/addAssignment?classId=${classId}`)}
-          />
-        </div>
-        <hr className="border-t-1 border-gray-300 mb-6" />
-        {/* Active Assignments */}
-        <h4 className="text-xl font-semibold text-green-600 mb-3">Active</h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-4">
-          {assignments.length > 0 ? (
-            assignments.map((assignment, index) => (
-              <AssignmentsCard key={index} assignment={assignment} />
-            ))
-          ) : (
-            <p className="text-gray-500">No active assignments</p>
-          )}
+      {/* Foreground Content */}
+      <div className="relative z-10 flex-grow flex flex-col items-center px-6 w-full max-w-6xl mx-auto mt-8">
+        {/* Title Section */}
+        <div className="mb-6 text-center">
+          <Title>{classDetails.name}</Title>
         </div>
 
-        {/* Expired Assignments */}
-        <div className="mb-6">
-          <h4 className="text-xl font-semibold text-red-600 mb-3">Expired</h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {expiredAssignments.length > 0 ? (
-              expiredAssignments.map((assignment, index) => (
+        {/* Class Details Section */}
+        <div className="w-full mb-8">
+          {/* Class Information */}
+          <div className="flex flex-col items-center mb-4">
+            <div className="mb-2">
+              <Label>
+                <span className="text-gray-800">
+                  Grade: {classDetails.Grades.name}
+                </span>
+              </Label>
+            </div>
+            <div className="mb-2">
+              <Label>
+                <span className="text-gray-800">
+                  Schedule: {classDetails.day}, {classDetails.start_time} -{" "}
+                  {classDetails.end_time}
+                </span>
+              </Label>
+            </div>
+            <div className="mb-2">
+              <Label>
+                <span className="text-gray-800">
+                  Teacher: {classDetails.teacher_username}
+                </span>
+              </Label>
+            </div>
+          </div>
+        </div>
+
+        {/* Assignments Section */}
+        <div className="w-full">
+          {/* Active Assignments Title and Add Button */}
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-2xl font-semibold text-gray-800">
+              Assignments
+            </h3>
+            <AddAssignmentButton
+              onClick={() => navigate(`/addAssignment?classId=${classId}`)}
+            />
+          </div>
+          <hr className="border-t-1 border-gray-600 mb-8" />
+
+          {/* Active Assignments */}
+          <h4 className="text-xl font-semibold text-green-600 mb-3">Active</h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-4">
+            {assignments.length > 0 ? (
+              assignments.map((assignment, index) => (
                 <AssignmentsCard key={index} assignment={assignment} />
               ))
             ) : (
-              <p className="text-gray-500">No expired assignments</p>
+              <p className="text-gray-500">No active assignments</p>
             )}
           </div>
-        </div>
-      </div>
 
-      {/* Class Options Section */}
-      <div className="w-full">
-        <div className="flex justify-between items-center">
-          <div className="w-40">
-            <StudentListButton
-              onClick={() => navigate(`/students?classId=${classId}`)}
-            />
+          {/* Expired Assignments */}
+          <div className="mb-6">
+            <h4 className="text-xl font-semibold text-red-600 mb-3">Expired</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {expiredAssignments.length > 0 ? (
+                expiredAssignments.map((assignment, index) => (
+                  <AssignmentsCard key={index} assignment={assignment} />
+                ))
+              ) : (
+                <p className="text-gray-500">No expired assignments</p>
+              )}
+            </div>
           </div>
-          <div className="w-20">
-            <BackButton onClick={() => navigate("/classes")} />
+        </div>
+
+        {/* Class Options Section */}
+        <div className="w-full">
+          <div className="flex justify-between items-center">
+            <div className="w-40">
+              <StudentListButton
+                onClick={() => navigate(`/students?classId=${classId}`)}
+              />
+            </div>
+            <div className="w-20">
+              <BackButton onClick={() => navigate("/classes")} />
+            </div>
           </div>
         </div>
       </div>

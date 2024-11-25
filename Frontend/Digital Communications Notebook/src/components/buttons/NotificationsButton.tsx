@@ -40,7 +40,7 @@ const NotificationsButton: React.FC = () => {
       {/* Notifications Button */}
       <button
         onClick={toggleNotifications}
-        className="bg-yellow-500 hover:bg-yellow-400 text-white py-3 px-4 rounded-full transition duration-300 ease-in-out"
+        className="hover:bg-blue-600 text-white py-3 px-4 rounded-full transition duration-300 ease-in-out"
       >
         <FontAwesomeIcon icon={faBell} size="lg" />
       </button>

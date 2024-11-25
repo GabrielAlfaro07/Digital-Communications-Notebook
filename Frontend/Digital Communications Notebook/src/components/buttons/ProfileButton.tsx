@@ -29,7 +29,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({
       {/* Profile Button */}
       <button
         onClick={handleProfileToggle}
-        className="bg-blue-600 hover:bg-blue-500 text-white py-3 px-4 rounded-full transition duration-300 ease-in-out"
+        className="hover:bg-blue-600 text-white py-3 px-4 rounded-full transition duration-300 ease-in-out"
       >
         <FontAwesomeIcon icon={faUser} size="lg" />
       </button>

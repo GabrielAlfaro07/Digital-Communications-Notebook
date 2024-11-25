@@ -36,7 +36,7 @@ const Profile: React.FC<ProfileProps> = ({
   };
 
   return (
-    <div className="flex flex-col text-center text-black items-center bg-white shadow-md rounded-2xl p-4 w-64 z-50">
+    <div className="flex flex-col text-center text-black items-center gap-1 bg-white shadow-md rounded-2xl px-4 pt-4 w-64 z-50">
       <img
         src={
           profilePicture ||
