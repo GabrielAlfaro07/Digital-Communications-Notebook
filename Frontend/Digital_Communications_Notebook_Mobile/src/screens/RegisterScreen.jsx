@@ -90,8 +90,8 @@ const RegisterScreen = () => {
   };
 
   return (
-    <View className="flex-1 justify-center items-center bg-gray-100 px-6">
-      <Text className="text-2xl font-bold mb-6">Register</Text>
+    <View className="flex-1 justify-center items-center bg-[#02367b] px-6">
+      <Text className="text-2xl font-bold mb-6 text-white">Register</Text>
       <Input
         placeholder="Username"
         value={username}
@@ -112,7 +112,7 @@ const RegisterScreen = () => {
         items={roles}
         placeholder="Select a role"
       />
-      {role === STUDENT_ROLE_ID && ( // Show grades dropdown only for students
+      {role === STUDENT_ROLE_ID && (
         <Dropdown
           value={grade}
           onChange={setGrade}

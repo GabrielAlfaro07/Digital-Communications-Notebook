@@ -15,14 +15,14 @@ const UniversalHeader = ({
   errorMessage = "",
 }) => {
   return (
-    <Header className="flex-row items-center justify-between px-4 py-2 bg-blue-600">
+    <Header className="flex-row items-center justify-between px-4 py-2">
       {/* Left Side: Notifications Button */}
       <View className="flex-row items-center">
         <NotificationsButton />
       </View>
 
       {/* Center: Title */}
-      <Text className="absolute left-1/2 transform -translate-x-1/2 text-lg font-bold text-black">
+      <Text className="absolute left-1/2 transform -translate-x-1/2 text-lg font-bold text-white">
         {title}
       </Text>
 

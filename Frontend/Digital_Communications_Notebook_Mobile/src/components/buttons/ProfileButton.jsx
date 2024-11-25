@@ -21,7 +21,7 @@ const ProfileButton = ({
       {/* Profile Button */}
       <Pressable
         onPress={handleProfileToggle}
-        className="bg-blue-600 hover:bg-blue-500 py-3 px-3 rounded-full transition duration-300"
+        className="py-3 px-3 rounded-full transition duration-300"
       >
         {/* Use an icon instead of emoji */}
         <Icon name="user-circle" size={24} color="white" />

@@ -8,7 +8,7 @@ const Header = ({ children }) => {
       <View className="mt-8"></View>
 
       {/* Main Header Container */}
-      <View className="relative flex-row items-center px-4 py-2 bg-white border-b border-gray-300">
+      <View className="relative flex-row items-center px-4 py-2 bg-[#02367b] border-b border-gray-300">
         {/* Children will be placed within this flexible layout */}
         {children}
       </View>

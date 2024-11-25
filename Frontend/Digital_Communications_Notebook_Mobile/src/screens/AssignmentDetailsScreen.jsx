@@ -3,6 +3,7 @@ import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { getAssignmentById } from "../services/assignmentsService";
 import Button from "../components/buttons/Button";
+import ScreenBackground from "./ScreenBackground";
 
 const AssignmentDetailsScreen = () => {
   const route = useRoute();
@@ -52,39 +53,41 @@ const AssignmentDetailsScreen = () => {
   }
 
   return (
-    <ScrollView className="p-4 bg-gray-50">
-      <Text className="text-2xl font-bold text-gray-900 mb-4">
-        {assignment.title}
-      </Text>
-      <Text className="text-base text-gray-800 mb-4">
-        {assignment.description}
-      </Text>
-      <Text className="text-sm text-gray-600 mb-2">
-        <Text className="font-semibold">Assigned At: </Text>
-        {new Date(assignment.assigned_at).toLocaleString()}
-      </Text>
-      <Text className="text-sm text-gray-600 mb-4">
-        <Text className="font-semibold">Due For: </Text>
-        {new Date(assignment.due_for).toLocaleString()}
-      </Text>
-
-      <Text className="text-lg font-semibold text-gray-900 mb-2">
-        Documents
-      </Text>
-      {assignment.documents && assignment.documents.length > 0 ? (
-        assignment.documents.map((doc) => (
-          <Text key={doc.document_id} className="text-sm text-blue-500 mb-1">
-            - {doc.file_url}
-          </Text>
-        ))
-      ) : (
-        <Text className="text-sm text-gray-600 mb-4">
-          No documents available.
+    <ScreenBackground>
+      <ScrollView className="p-4">
+        <Text className="text-2xl font-bold text-gray-900 mb-4">
+          {assignment.title}
         </Text>
-      )}
+        <Text className="text-base text-gray-800 mb-4">
+          {assignment.description}
+        </Text>
+        <Text className="text-sm text-gray-600 mb-2">
+          <Text className="font-semibold">Assigned At: </Text>
+          {new Date(assignment.assigned_at).toLocaleString()}
+        </Text>
+        <Text className="text-sm text-gray-600 mb-4">
+          <Text className="font-semibold">Due For: </Text>
+          {new Date(assignment.due_for).toLocaleString()}
+        </Text>
 
-      <Button title="Back to Class" onPress={handleBack} />
-    </ScrollView>
+        <Text className="text-lg font-semibold text-gray-900 mb-2">
+          Documents
+        </Text>
+        {assignment.documents && assignment.documents.length > 0 ? (
+          assignment.documents.map((doc) => (
+            <Text key={doc.document_id} className="text-sm text-blue-500 mb-1">
+              - {doc.file_url}
+            </Text>
+          ))
+        ) : (
+          <Text className="text-sm text-gray-600 mb-4">
+            No documents available.
+          </Text>
+        )}
+
+        <Button title="Back to Class" onPress={handleBack} />
+      </ScrollView>
+    </ScreenBackground>
   );
 };
 

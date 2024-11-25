@@ -54,10 +54,7 @@ const NotificationsButton = () => {
   return (
     <View style={{ position: "relative" }}>
       {/* Notifications Button */}
-      <Pressable
-        onPress={toggleNotifications}
-        className="bg-yellow-500 p-3 rounded-full"
-      >
+      <Pressable onPress={toggleNotifications} className="p-3 rounded-full">
         <Icon name="bell" size={24} color="white" />
       </Pressable>
 
