@@ -22,6 +22,7 @@ const AddAssignmentScreen: React.FC = () => {
     class_id: classId || "", // Default to classId from query params
   });
 
+  const [documents, setDocuments] = useState<File[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   // Update form data on input change
@@ -32,12 +33,33 @@ const AddAssignmentScreen: React.FC = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const selectedFiles = Array.from(e.target.files);
+      setDocuments((prevDocuments) => [...prevDocuments, ...selectedFiles]);
+    }
+  };
+
+  const handleRemoveFile = (index: number) => {
+    setDocuments((prevDocuments) =>
+      prevDocuments.filter((_, fileIndex) => fileIndex !== index)
+    );
+  };
+
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
   // Submit the form and create the assignment
   const handleSubmit = async () => {
     try {
       setError(null);
 
-      // Ensure all fields are filled
+      // Validate required fields
       if (
         !formData.title ||
         !formData.description ||
@@ -48,21 +70,36 @@ const AddAssignmentScreen: React.FC = () => {
         throw new Error("All fields are required.");
       }
 
-      // Call the createAssignment service
-      await createAssignment(
+      // Convert documents to the expected format
+      const documentData = await Promise.all(
+        documents.map(async (file) => {
+          const base64 = await fileToBase64(file);
+          return {
+            name: file.name,
+            file_type: file.type,
+            data: base64,
+          };
+        })
+      );
+
+      // Call the service
+      const assignment = await createAssignment(
         {
           title: formData.title,
           description: formData.description,
           assigned_at: new Date(formData.assigned_at).toISOString(),
           due_for: new Date(formData.due_for).toISOString(),
           class_id: formData.class_id,
+          documents: documentData, // Send the formatted documents
         },
-        formData.class_id // Pass the class_id as the second argument
+        formData.class_id
       );
 
       toast.success("Assignment added successfully.");
-      navigate(-1); // Redirect to class details page
+      console.log(assignment);
+      navigate(-1); // Redirect to the previous page
     } catch (err: any) {
+      console.error("Error creating assignment:", err);
       toast.error("Failed to add assignment.");
       setError(err.message || "Failed to add assignment.");
     }
@@ -75,21 +112,17 @@ const AddAssignmentScreen: React.FC = () => {
 
   return (
     <div className="flex-grow flex flex-col items-center px-6 w-full max-w-6xl mx-auto mt-8">
-      {/* Title */}
       <div className="mb-6 text-center">
         <Title>Add New Assignment</Title>
       </div>
 
-      {/* Error Message */}
       {error && (
         <div className="text-red-500 mb-4 font-semibold text-center">
           {error}
         </div>
       )}
 
-      {/* Input Form */}
       <div className="w-full max-w-lg space-y-4">
-        {/* Assignment Title */}
         <div>
           <Label>Assignment Title</Label>
           <Input
@@ -101,7 +134,6 @@ const AddAssignmentScreen: React.FC = () => {
           />
         </div>
 
-        {/* Assignment Description */}
         <div>
           <Label>Description</Label>
           <Textarea
@@ -112,7 +144,6 @@ const AddAssignmentScreen: React.FC = () => {
           />
         </div>
 
-        {/* Assigned At */}
         <div>
           <Label>Assigned At</Label>
           <Input
@@ -124,7 +155,6 @@ const AddAssignmentScreen: React.FC = () => {
           />
         </div>
 
-        {/* Due For */}
         <div>
           <Label>Due Date</Label>
           <Input
@@ -135,9 +165,39 @@ const AddAssignmentScreen: React.FC = () => {
             onChange={handleInputChange}
           />
         </div>
+
+        <div>
+          <Label>Upload Documents</Label>
+          <Input
+            type="file"
+            multiple
+            accept="image/*,application/pdf"
+            onChange={handleFileChange}
+          />
+          {documents.length > 0 && (
+            <div className="mt-4">
+              <h3 className="text-lg font-semibold mb-2">Selected Files:</h3>
+              <ul className="space-y-2">
+                {documents.map((file, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center justify-between bg-gray-100 p-2 rounded-md"
+                  >
+                    <span>{file.name}</span>
+                    <button
+                      className="text-red-500 hover:underline"
+                      onClick={() => handleRemoveFile(index)}
+                    >
+                      Remove
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Submit and Back Buttons */}
       <div className="mt-6 flex w-80 justify-between items-center gap-2">
         <BackButton onClick={handleBack} />
         <AddNewAssignmentButton onClick={handleSubmit} />

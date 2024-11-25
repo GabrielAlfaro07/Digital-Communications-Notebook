@@ -102,15 +102,32 @@ const AssignmentDetailsScreen: React.FC = () => {
           {assignment.documents && assignment.documents.length > 0 ? (
             <ul className="list-disc pl-6">
               {assignment.documents.map((doc) => (
-                <li key={doc.document_id}>
-                  <a
-                    href={doc.file_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500"
-                  >
-                    {doc.file_url}
-                  </a>
+                <li key={doc.document_id} className="mb-2">
+                  <div className="flex items-center space-x-4">
+                    {/* Preview File */}
+                    <a
+                      href={doc.file_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline"
+                    >
+                      Preview
+                    </a>
+
+                    {/* Download File */}
+                    <a
+                      href={doc.file_url}
+                      download
+                      className="text-green-500 hover:underline"
+                    >
+                      Download
+                    </a>
+
+                    {/* Display File Type (Optional) */}
+                    <span className="text-gray-600 text-sm">
+                      ({doc.file_type || "Unknown type"})
+                    </span>
+                  </div>
                 </li>
               ))}
             </ul>

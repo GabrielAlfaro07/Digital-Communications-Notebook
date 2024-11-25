@@ -1,6 +1,7 @@
 const express = require("express");
 const authenticateUser = require("../middlewares/authenticateUser");
 const supabase = require("../config/supabaseClient");
+const { v4: uuidv4 } = require("uuid"); // For generating unique document IDs
 
 const router = express.Router();
 
@@ -68,7 +69,9 @@ router.get("/:assignment_id", authenticateUser, async (req, res) => {
 
 // Endpoint to create a new assignment
 router.post("/", authenticateUser, async (req, res) => {
-  const { title, description, assigned_at, due_for, class_id } = req.body;
+  const { title, description, assigned_at, due_for, class_id, documents } =
+    req.body; // `documents` should be an array of file objects (e.g., { name, type, data })
+  const userId = req.auth.user.id; // Get the session user ID
 
   try {
     // Validate input
@@ -76,7 +79,8 @@ router.post("/", authenticateUser, async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const { data: newAssignment, error } = await supabase
+    // Create a new assignment
+    const { data: newAssignment, error: assignmentError } = await supabase
       .from("Assignments")
       .insert([
         {
@@ -89,14 +93,84 @@ router.post("/", authenticateUser, async (req, res) => {
         },
       ])
       .select()
-      .single(); // Return the inserted assignment
+      .single();
 
-    if (error) {
-      console.error("Error creating assignment:", error.message);
+    if (assignmentError) {
+      console.error("Error creating assignment:", assignmentError.message);
       return res.status(500).json({ error: "Failed to create assignment" });
     }
 
-    res.status(201).json(newAssignment); // Return the newly created assignment
+    const assignmentId = newAssignment.assignment_id;
+
+    // Upload and link documents if provided
+    if (documents && documents.length > 0) {
+      for (const document of documents) {
+        const documentId = uuidv4(); // Generate a unique document ID
+        const filePath = `${documentId}-${document.name}`; // Create a unique file path
+
+        // Upload the file to Supabase Storage
+        const { error: uploadError } = await supabase.storage
+          .from("assignments-documents")
+          .upload(filePath, Buffer.from(document.data, "base64"), {
+            contentType: document.type,
+          });
+
+        if (uploadError) {
+          console.error("Error uploading document:", uploadError.message);
+          return res.status(500).json({ error: "Failed to upload document" });
+        }
+
+        const fileUrl = supabase.storage
+          .from("assignments-documents")
+          .getPublicUrl(filePath).data.publicUrl;
+
+        // Insert document metadata into `Documents` table
+        const { error: documentError } = await supabase
+          .from("Documents")
+          .insert([
+            {
+              document_id: documentId,
+              file_url: fileUrl,
+              file_type: document.type,
+              uploaded_by: userId,
+              associated_with: "Assignment",
+            },
+          ]);
+
+        if (documentError) {
+          console.error(
+            "Error saving document metadata:",
+            documentError.message
+          );
+          return res
+            .status(500)
+            .json({ error: "Failed to save document metadata" });
+        }
+
+        // Link the document to the assignment
+        const { error: linkError } = await supabase
+          .from("Assignments_Documents")
+          .insert([
+            {
+              assignment_id: assignmentId,
+              document_id: documentId,
+            },
+          ]);
+
+        if (linkError) {
+          console.error(
+            "Error linking document to assignment:",
+            linkError.message
+          );
+          return res
+            .status(500)
+            .json({ error: "Failed to link document to assignment" });
+        }
+      }
+    }
+
+    // Return the newly created assignment
+    res.status(201).json(newAssignment);
   } catch (err) {
     console.error("Unexpected error:", err.message);
     res.status(500).json({ error: "Internal Server Error" });

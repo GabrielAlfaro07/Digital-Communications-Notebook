@@ -47,11 +47,6 @@ const studentRoutes = require("./src/routes/studentRoutes");
 const classesStudentsRoutes = require("./src/routes/classesStudentsRoutes");
 const notificationsRoutes = require("./src/routes/notificationsRoutes");
 
-const guardianRoutes = require("./src/routes/guardianRoutes");
-const teacherRoutes = require("./src/routes/teacherRoutes");
-const classesAssignmentsRoutes = require("./src/routes/classesAssignmentsRoutes");
-const assignmentsStudentsRoutes = require("./src/routes/assignmentsStudentsRoutes");
-
 // Usar las rutas
 app.use("/api/grades", gradesRoutes);
 app.use("/api/roles", rolesRoutes);
@@ -61,11 +56,6 @@ app.use("/api/assignments", assignmentRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/classes/students", classesStudentsRoutes);
 app.use("/api/notifications", notificationsRoutes);
-
-app.use("/api/encargados", guardianRoutes);
-app.use("/api/docentes", teacherRoutes);
-app.use("/api/clases-asignaciones", classesAssignmentsRoutes);
-app.use("/api/asignaciones-estudiantes", assignmentsStudentsRoutes);
 
 // Iniciar el servidor
 app.listen(port, "0.0.0.0", () => {
