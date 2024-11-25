@@ -111,7 +111,7 @@ router.get("/:class_id/students", authenticateUser, async (req, res) => {
 
 module.exports = router;
 
-// Endpoint to add students to a class
+// Endpoint to add students to a class and notify them
 router.post("/:class_id/add-students", authenticateUser, async (req, res) => {
   const { class_id } = req.params;
   const { student_ids } = req.body; // Expecting an array of student IDs
@@ -121,24 +121,85 @@ router.post("/:class_id/add-students", authenticateUser, async (req, res) => {
   }
 
   try {
-    // Insert students into Classes_Students table
-    const { error } = await supabase.from("Classes_Students").insert(
-      student_ids.map((student_id) => ({
-        class_id,
-        student_id,
-      }))
-    );
+    // Get class details
+    const { data: classData, error: classError } = await supabase
+      .from("Classes")
+      .select("name")
+      .eq("class_id", class_id)
+      .single();
 
-    if (error) {
-      console.error("Error inserting students into class:", error.message);
+    if (classError || !classData) {
+      console.error("Error fetching class details:", classError?.message);
+      return res.status(500).json({ error: "Failed to fetch class details." });
+    }
+
+    const className = classData.name;
+
+    // Insert students into Classes_Students table
+    const { error: insertError } = await supabase
+      .from("Classes_Students")
+      .insert(
+        student_ids.map((student_id) => ({
+          class_id,
+          student_id,
+        }))
+      );
+
+    if (insertError) {
+      console.error(
+        "Error inserting students into class:",
+        insertError.message
+      );
       return res
         .status(500)
-        .json({ error: "Failed to add students to the class" });
+        .json({ error: "Failed to add students to the class." });
+    }
+
+    // Send notifications to each student
+    const notifications = student_ids.map((student_id) => ({
+      content: `You have been added to the class "${className}"!`,
+      time: new Date().toISOString(),
+    }));
+
+    const { data: notificationData, error: notificationError } = await supabase
+      .from("Notifications")
+      .insert(notifications)
+      .select();
+
+    if (notificationError || !notificationData) {
+      console.error(
+        "Error creating notifications:",
+        notificationError?.message
+      );
+      return res.status(500).json({ error: "Failed to create notifications." });
+    }
+
+    // Link notifications to students
+    const notificationsUsers = notificationData.map((notification, index) => ({
+      notification_id: notification.notification_id,
+      user_id: student_ids[index],
+      is_read: false,
+    }));
+
+    const { error: linkError } = await supabase
+      .from("Notifications_Users")
+      .insert(notificationsUsers);
+
+    if (linkError) {
+      console.error(
+        "Error linking notifications to students:",
+        linkError.message
+      );
+      return res
+        .status(500)
+        .json({ error: "Failed to link notifications to students." });
     }
 
     res
       .status(200)
-      .json({ message: "Students successfully added to the class." });
+      .json({
+        message: "Students successfully added to the class and notified.",
+      });
   } catch (error) {
     console.error("Unexpected error:", error.message);
     res.status(500).json({ error: "Internal Server Error" });

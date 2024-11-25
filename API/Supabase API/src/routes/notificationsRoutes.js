@@ -10,15 +10,29 @@ router.post("/class/:class_id", authenticateUser, async (req, res) => {
   const { content } = req.body;
 
   try {
-    // Validate input
-    if (!content) {
-      return res.status(400).json({ error: "Content is required" });
+    // Fetch the class name
+    const { data: classData, error: classError } = await supabase
+      .from("Classes")
+      .select("name")
+      .eq("class_id", class_id)
+      .single();
+
+    if (classError || !classData) {
+      console.error("Error fetching class details:", classError?.message);
+      return res.status(404).json({ error: "Class not found" });
     }
+
+    const className = classData.name;
 
     // Create the notification
     const { data: notification, error: notificationError } = await supabase
       .from("Notifications")
-      .insert([{ content, time: new Date().toISOString() }])
+      .insert([
+        {
+          content: `${content} in the class "${className}".`,
+          time: new Date().toISOString(),
+        },
+      ])
       .select()
       .single();
 
@@ -60,7 +74,9 @@ router.post("/class/:class_id", authenticateUser, async (req, res) => {
         .json({ error: "Failed to create notifications for users" });
     }
 
-    res.status(201).json({ message: "Notification created for all students" });
+    res
+      .status(201)
+      .json({ message: "Notification created for all students in the class" });
   } catch (err) {
     console.error("Unexpected error:", err.message);
     res.status(500).json({ error: "Internal Server Error" });

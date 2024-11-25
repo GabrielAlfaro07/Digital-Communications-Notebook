@@ -49,13 +49,16 @@ const AddAssignmentScreen: React.FC = () => {
       }
 
       // Call the createAssignment service
-      await createAssignment({
-        title: formData.title,
-        description: formData.description,
-        assigned_at: new Date(formData.assigned_at).toISOString(),
-        due_for: new Date(formData.due_for).toISOString(),
-        class_id: formData.class_id,
-      });
+      await createAssignment(
+        {
+          title: formData.title,
+          description: formData.description,
+          assigned_at: new Date(formData.assigned_at).toISOString(),
+          due_for: new Date(formData.due_for).toISOString(),
+          class_id: formData.class_id,
+        },
+        formData.class_id // Pass the class_id as the second argument
+      );
 
       toast.success("Assignment added successfully.");
       navigate(-1); // Redirect to class details page

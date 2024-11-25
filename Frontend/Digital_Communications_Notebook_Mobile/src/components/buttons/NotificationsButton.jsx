@@ -29,7 +29,17 @@ const NotificationsButton = () => {
     setError(null);
     try {
       const data = await getNotifications();
-      setNotifications(data);
+      console.log("Fetched Notifications:", data); // Log fetched data
+
+      // Flatten the structure to match the expected format
+      const flattenedData = data.map((item) => ({
+        notification_id: item.Notifications.notification_id,
+        content: item.Notifications.content,
+        time: item.Notifications.time,
+        is_read: item.is_read,
+      }));
+
+      setNotifications(flattenedData);
     } catch (err) {
       setError("Failed to fetch notifications.");
       console.error(err);

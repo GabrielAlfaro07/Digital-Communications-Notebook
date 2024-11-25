@@ -17,7 +17,7 @@ export interface Assignment {
   }[];
 }
 
-const BASE_URL = "http://localhost:5000/api/assignments";
+const BASE_URL = "http://localhost:5000/api";
 
 const getToken = async (): Promise<string> => {
   const session = await supabase.auth.getSession();
@@ -40,7 +40,7 @@ export const getAssignmentById = async (
 ): Promise<Assignment> => {
   const token = await getToken();
 
-  const response = await fetch(`${BASE_URL}/${assignmentId}`, {
+  const response = await fetch(`${BASE_URL}/assignments/${assignmentId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -56,16 +56,19 @@ export const getAssignmentById = async (
 };
 
 /**
- * Creates a new assignment.
- * @param assignmentData - The data for the new assignment
- * @returns A Promise resolving to the newly created assignment
+ * Creates a new assignment and notifies students in the class.
+ * @param assignmentData - The data for the new assignment.
+ * @param classId - The ID of the class where the assignment is created.
+ * @returns A Promise resolving to the newly created assignment.
  */
 export const createAssignment = async (
-  assignmentData: Omit<Assignment, "assignment_id" | "created_at">
+  assignmentData: Omit<Assignment, "assignment_id" | "created_at">,
+  classId: string | null
 ): Promise<Assignment> => {
   const token = await getToken();
 
-  const response = await fetch(BASE_URL, {
+  // Create the assignment
+  const response = await fetch(`${BASE_URL}/assignments/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -78,7 +81,28 @@ export const createAssignment = async (
     throw new Error("Failed to create assignment");
   }
 
-  return response.json();
+  const newAssignment = await response.json();
+
+  // Notify students about the new assignment
+  const notificationResponse = await fetch(
+    `${BASE_URL}/notifications/class/${classId}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        content: `A new assignment titled "${assignmentData.title}" has been posted in your class.`,
+      }),
+    }
+  );
+
+  if (!notificationResponse.ok) {
+    console.error("Failed to send notifications to students");
+  }
+
+  return newAssignment;
 };
 
 /**
