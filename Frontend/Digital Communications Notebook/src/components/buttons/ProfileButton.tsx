@@ -1,0 +1,53 @@
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import Profile from "../profile/Profile";
+
+interface ProfileButtonProps {
+  name: string;
+  email: string;
+  profilePicture: string;
+  userRole: string;
+  userGrade: string;
+}
+
+const ProfileButton: React.FC<ProfileButtonProps> = ({
+  name,
+  email,
+  profilePicture,
+  userRole,
+  userGrade,
+}) => {
+  const [isProfileOpen, setProfileOpen] = useState(false);
+
+  const handleProfileToggle = () => {
+    setProfileOpen(!isProfileOpen);
+  };
+
+  return (
+    <div className="relative">
+      {/* Profile Button */}
+      <button
+        onClick={handleProfileToggle}
+        className="hover:bg-blue-600 text-white py-3 px-4 rounded-full transition duration-300 ease-in-out"
+      >
+        <FontAwesomeIcon icon={faUser} size="lg" />
+      </button>
+
+      {/* Profile Display */}
+      {isProfileOpen && (
+        <div className="absolute right-0 mt-4 z-10">
+          <Profile
+            name={name}
+            email={email}
+            profilePicture={profilePicture}
+            userRole={userRole}
+            userGrade={userGrade}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ProfileButton;
