@@ -6,7 +6,7 @@ interface TitleProps {
 }
 
 const Title: React.FC<TitleProps> = ({ children }) => (
-  <h2 className="text-3xl font-bold mb-6">{children}</h2>
+  <h2 className="text-3xl font-bold">{children}</h2>
 );
 
 export default Title;

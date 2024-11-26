@@ -1,26 +1,26 @@
-import React, { useState } from "react";
-import LoginScreen from "./components/screens/LoginScreen";
-import RegisterScreen from "./components/screens/RegisterAccountScreen";
+import React from "react";
+import { BrowserRouter as Router } from "react-router-dom"; // Import Router component
+import MainContent from "./MainContent"; // Import MainContent component
+import { ToastContainer } from "react-toastify"; // Import ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Toast styling
 
 const App: React.FC = () => {
-  const [showLogin, setShowLogin] = useState(true);
-
-  const handleRegisterClick = () => {
-    setShowLogin(false);
-  };
-
-  const handleBackToLogin = () => {
-    setShowLogin(true);
-  };
-
   return (
-    <div>
-      {showLogin ? (
-        <LoginScreen onRegisterClick={handleRegisterClick} />
-      ) : (
-        <RegisterScreen onBackClick={handleBackToLogin} />
-      )}
-    </div>
+    <Router>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light" // Or "dark"
+      />
+      <MainContent />
+    </Router>
   );
 };
 

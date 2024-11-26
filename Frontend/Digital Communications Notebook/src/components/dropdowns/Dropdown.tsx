@@ -9,7 +9,7 @@ interface DropdownProps {
 
 const Dropdown: React.FC<DropdownProps> = ({ value, onChange, children }) => (
   <select
-    className="py-2 px-3 mb-4 border rounded-xl w-80"
+    className="py-2 px-3 mb-4 border rounded-xl w-full"
     value={value}
     onChange={onChange}
   >
